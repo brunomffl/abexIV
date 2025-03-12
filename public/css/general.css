@@ -22,3 +22,21 @@ body{
     height: 100vh;
     width: 100%;
 }
+
+#error{
+    color: var(--beige);
+    width: 300px;
+    background-color: #cd5449;
+    border-radius: 15px;
+    padding: 8px 15px;
+    position: absolute;
+}
+
+#success{
+    color: var(--beige);
+    width: 300px;
+    background-color: #198754;
+    border-radius: 15px;
+    padding: 8px 15px;
+    position: absolute;
+}
