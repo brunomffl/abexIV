@@ -4,3 +4,7 @@
 .left-section .hero-image{
     background: url(https://static01.nyt.com/athletic/uploads/wp/2024/06/06164104/Luka_Kyrie_Insert1.png) center/cover no-repeat;
 }
+
+.right-section .title .moeda img{
+    left: -100px;
+}
