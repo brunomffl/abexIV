@@ -10,6 +10,8 @@
     padding: 25px;
     box-shadow: 3px 0 15px rgba(0, 0, 0, .8);
 }
+
+
 /*seção esquerda*/
 .left-section{
     height: 100%;
@@ -18,12 +20,31 @@
     align-items: center;
     justify-content: center;
     border-radius: 25px;
+    position: relative;
 }
 .left-section .hero-image{
     height: 100%;
     width: 100%;
     border-radius: 25px;
     background: url(https://www.si.com/.image/t_share/MjAyNzQ2NTQ2MzA1OTAxNTgw/usatsi_22051799_168388359_lowres.jpg) center/cover no-repeat;
+}
+/*voltar para página inicial*/
+.voltarHomeLink{
+    text-decoration: none;
+    color: var(--beige);
+    font-weight: 400;
+}
+.voltarHome{
+    position: absolute;
+    background-color: rgba(0, 0, 0, .6);
+    top: 15px;
+    right: 15px;
+    padding: 6px 8px;
+    border-radius: 12px;
+    transition: all .3s ease;
+}
+.voltarHome:hover{
+    transform: translateY(-2px);
 }
 
 /*seção direita*/
