@@ -18,4 +18,6 @@ db.connect((error) => {
         console.log("banco de dados conectado")
     }
 })
+app.use("/", require("./routes/pages"));
+app.use("/api", require("./controllers/auth"));
 app.listen(PORT)
