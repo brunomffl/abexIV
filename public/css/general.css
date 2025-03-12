@@ -1,0 +1,24 @@
+:root{
+    --dark-blue: #01161E;
+    --mid-blue:#124559;
+    --light-blue: #598392;
+    --light-green: #AEC3B0;
+    --beige: #EFF6E0;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mid-blue);
+    color: var(--beige);
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    width: 100%;
+}
