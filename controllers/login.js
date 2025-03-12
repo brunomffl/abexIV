@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const db = require("../routes/db-config");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 const login = (async (req, res) => {
     const { email, password } = req.body;
