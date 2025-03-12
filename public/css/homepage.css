@@ -1,5 +1,32 @@
 @import url(general.css);
-
 body{
-    background-color: red;
+    color: var(--beige);
+}
+.container{
+    font-family: "Poppins";
+    background-color: var(--dark-blue);
+    padding: 35px 50px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.container .links{
+    display: flex;
+    justify-content: space-between;
+}
+
+.container .links a{
+    display: inline-block;
+    background-color: var(--mid-blue);
+    transition: .3s ease;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: var(--beige);
+}
+
+.container .links a:hover{
+    background-color: var(--light-blue);
 }
