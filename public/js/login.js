@@ -1,4 +1,4 @@
-document.querySelector('form').addEventListener('submit', (e) => {
+document.querySelector('#loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     
     const email = document.querySelector('#email').value;
@@ -27,6 +27,9 @@ document.querySelector('form').addEventListener('submit', (e) => {
             success.style.display = "block";
             error.style.display = "none"
             success.innerText = data.success;
+            console.log("Login bem-sucedido:", data);
         }
-    }) 
+    }).catch((err) => {
+        console.error("Failed to fetch:", err);
+    });
 })

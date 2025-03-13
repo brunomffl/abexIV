@@ -4,7 +4,9 @@ const app = express();
 const cookie = require("cookie-parser");
 const PORT = process.env.PORT || 3000
 
-app.use(express.static(__dirname + "/public"));
+app.use("/js", express.static(__dirname + "/public/js"));
+app.use("/css", express.static(__dirname + "/public/css"));
+app.use("/imgs", express.static(__dirname + "/public/imgs"));
 
 app.set("view engine", "ejs");
 app.set("views", "./views");

@@ -1,12 +1,14 @@
-document.querySelector('form').addEventListener('submit', (e) => {
+document.querySelector('#registerForm').addEventListener('submit', (e) => {
     e.preventDefault();
     
+    const nome = document.querySelector('#nome').value;
     const email = document.querySelector('#email').value;
     const password = document.querySelector('#password').value;
     const success = document.querySelector("#success");
     const error = document.querySelector("#error");
 
     const register = {
+        nome: nome,
         email: email,
         password: password,
     }
@@ -21,12 +23,14 @@ document.querySelector('form').addEventListener('submit', (e) => {
     }).then(data => {
         if(data.status == "error"){
             success.style.display = "none";
-            error.style.display = "block"
+            error.style.display = "flex"
             error.innerText = data.error;
         }else{
-            success.style.display = "block";
+            success.style.display = "flex";
             error.style.display = "none"
             success.innerText = data.success;
         }
-    }) 
+    }).catch((err) => {
+        console.error("Failed to fetch:", err);
+    });
 })

@@ -16,34 +16,35 @@
                     <img src="./imgs/moedinha.png" alt="Moeda">
                 </div>
                 <div class="titletext">
-                    <h1>Bem vindo <br>de volta,</h1>
+                    <h1>Bem vindo <br>principiante,</h1>
                     <p>está pronto para<br>a jornada de se tornar o<br><span>Mestre das moedas</span>!?</p>
                 </div>
             </div>
 
-            
-            <form>
+            <form id="registerForm">
                 <div class="formulario">
                     <div class="preencher">
-                        <label for="username"></label>
-                        <input type="text" id="username" placeholder="Crie seu nome de usuário">
+                        <label for="nome"></label>
+                        <input type="text" id="nome" placeholder="Digite seu usuário bem criativo">
+                        <label for="email"></label>
+                        <input type="email" id="email" placeholder="Digite seu melhor e-mail">
                         <label for="password"></label>
                         <input type="password" id="password" placeholder="Crie uma senha bem segura">
                     </div>
                     <div id="error" style="display: none;">⚠️ Aqui deu erro pra testar alguma coisa blablabla</div>
-                    <div id="success" style="display: none;">✅ Aqui deu certo pra testar alguma coisa blablabla</div>
+                    <div id="success" style="display: none;">✅ Você foi registrado!</div>
                     <button type="submit" class="botaoEnvio">Iniciar jogo!</button>
                 </div>
             </form>
 
             <div class="semConta">
                 <div class="risquinho"></div>
-                <a href="#">Já possui uma conta??</a>
+                <a href="/login">Já possui uma conta??</a>
             </div>
         </div>
 
         <div class="left-section">
-            <a href="#" class="voltarHomeLink">
+            <a href="/" class="voltarHomeLink">
                 <div class="voltarHome">
                     <p">Voltar ao início</p>
                 </div>
@@ -51,7 +52,6 @@
             <div class="hero-image"></div>
         </div>
     </div>
-
 
     <script src="./js/register.js"></script>
 </body>
