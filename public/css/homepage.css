@@ -10,6 +10,7 @@ body{
     display: flex;
     flex-direction: column;
     gap: 15px;
+    box-shadow: 3px 8px 20px rgba( 0, 0, 0, .4 );
 }
 
 .container .links{
@@ -29,4 +30,12 @@ body{
 
 .container .links a:hover{
     background-color: var(--light-blue);
+}
+
+h2{
+    font-weight: 500;
+}
+
+h2 span{
+    font-weight: 700;
 }
