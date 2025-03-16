@@ -28,6 +28,7 @@ body{
     color: var(--beige);
 }
 
+
 .container .links a:hover{
     background-color: var(--light-blue);
 }
@@ -38,4 +39,11 @@ h2{
 
 h2 span{
     font-weight: 700;
+}
+
+.container .links .logoutButton{
+    background-color: #cd5449;
+}
+.container .links .logoutButton:hover{
+    background-color: #6c2c26;
 }

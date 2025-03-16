@@ -12,15 +12,18 @@
     <div class="container">
         <% if (status == 'loggedIn') { %>
             <h2> Bem-vindo de volta, <span><%= user.nome %></span>!</h2>
+            <div class="links">
+                <a href="/">Acessar perfil</a>
+                <a href="/logout" class="logoutButton">Sair da conta</a>
+            </div>
         <% } else { %>
             <h2>Bem-vindo ao <span>Mestre das Moedas</span>!</h2>
+            <div class="links">
+                <a href="/login">Acessar uma conta</a>
+                <a href="/register">Cadastrar-se</a>
+            </div>
         <% } %>
         
-
-        <div class="links">
-            <a href="/login">Acessar uma conta</a>
-            <a href="/register">Cadastrar-se</a>
-        </div>
     </div>
 
 </body>
