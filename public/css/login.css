@@ -1,6 +1,17 @@
 
 @import url(general.css);
 
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mid-blue);
+    color: var(--beige);
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    width: 100%;
+}
+
 .container{
     display: flex;
     height: 80%;

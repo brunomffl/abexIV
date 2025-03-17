@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de perfil</title>
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="shortcut icon" href="./imgs/moedinha.png" type="image/x-icon">
+</head>
+<body>
+    
+    <header id="header">
+        <nav>
+            <ul>
+                <li><a href="/">Início</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/profile" class="active">Meu perfil</a></li>
+                <li><a href="/logout" class="logout">Sair da conta</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="left">
+                <div class="profile-pic"></div>
+                <div class="username"><span>@</span><%= user.nome %></div>
+            </div>
+            <div class="right">
+                <div class="field">
+                    <div class="field-name">E-mail:</div>
+                    <div class="field-value"><%= user.email %></div>
+                </div>
+                <div class="field">
+                    <div class="field-name">Senha:</div>
+                    <div class="field-value"><%= '*'.repeat(user.senhaLength) %></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/profile.js"></script>
+</body>
+</html>

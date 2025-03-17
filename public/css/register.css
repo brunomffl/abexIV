@@ -1,6 +1,17 @@
 @import url(general.css);
 @import url(login.css);
 
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mid-blue);
+    color: var(--beige);
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    width: 100%;
+}
+
 .left-section .hero-image{
     background: url(https://static01.nyt.com/athletic/uploads/wp/2024/06/06164104/Luka_Kyrie_Insert1.png) center/cover no-repeat;
 }

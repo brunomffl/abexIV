@@ -12,7 +12,8 @@ const register = async (req, res) => {
                 return res.json({ status: "error", error: "⚠️ Este e-mail já foi registrado!" });
             } else {
                 const password = await bcrypt.hash(Npassword, 8);
-                db.query("INSERT INTO usuarios SET ?", { nome: nome, email: email, senha: password }, (error, results) => {
+                const senhaLength = Npassword.length;
+                db.query("INSERT INTO usuarios SET ?", { nome: nome, email: email, senha: password, senhaLength: senhaLength }, (error, results) => {
                     if (error) throw error;
                     return res.json({ status: "success", success: "✅ Você foi registrado!" });
                 });
