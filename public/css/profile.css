@@ -105,6 +105,10 @@ main{
     font-weight: 200;
     font-style: italic;
 }
+.container .left .edit-icon{
+    display: flex;
+    align-items: center;
+}
 
 .container .right{
     display: flex;

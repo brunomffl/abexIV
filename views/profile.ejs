@@ -22,11 +22,14 @@
 
     <main>
         <div class="container">
-            <div class="left">
+            <div class="left" style="opacity: 0;">
                 <div class="profile-pic"></div>
                 <div class="username"><span>@</span><%= user.nome %></div>
+                <a href="#" class="edit-icon">
+                    <img src="./imgs/edit-button.png" alt="Edit icon">
+                </a>
             </div>
-            <div class="right">
+            <div class="right" style="opacity: 0;">
                 <div class="field">
                     <div class="field-name">E-mail:</div>
                     <div class="field-value"><%= user.email %></div>
