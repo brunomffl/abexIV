@@ -19,6 +19,5 @@ headerLinks.forEach((link) => {
 });
 
 editButton.addEventListener("click", () => {
-    containerLeft.style.opacity = 0;
     containerRight.style.opacity = 0;
 })

@@ -81,6 +81,8 @@ main{
     background-color: var(--dark-blue);
     border-radius: 25px;
     padding: 25px 45px;
+    width: 500px;
+    height: 300px;
 }
 
 .container .left{
@@ -126,4 +128,19 @@ main{
 }
 .field-value{
     padding-left: 15px;
+}
+
+.fields{
+    display: none;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.fields input{
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--light-blue);
+    background-color: transparent;
+    font-family: "Poppins";
+    color: var(--beige);
 }

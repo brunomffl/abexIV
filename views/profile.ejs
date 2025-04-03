@@ -22,14 +22,14 @@
 
     <main>
         <div class="container">
-            <div class="left" style="opacity: 0;">
+            <div class="left">
                 <div class="profile-pic"></div>
                 <div class="username"><span>@</span><%= user.nome %></div>
                 <a href="#" class="edit-icon">
                     <img src="./imgs/edit-button.png" alt="Edit icon">
                 </a>
             </div>
-            <div class="right" style="opacity: 0;">
+            <div class="right" style="pointer-events: none;">
                 <div class="field">
                     <div class="field-name">E-mail:</div>
                     <div class="field-value"><%= user.email %></div>
@@ -37,6 +37,13 @@
                 <div class="field">
                     <div class="field-name">Senha:</div>
                     <div class="field-value"><%= '*'.repeat(user.senhaLength) %></div>
+                </div>
+            </div>
+            <div class="edit">
+                <div class="fields">
+                    <input type="email" name="newEmail" placeholder="Digite seu novo e-mail">
+                    <input type="text" name="newUser" placeholder="Digite seu novo usuário">
+                    <input type="password" name="newPassword" placeholder="Digite sua nova senha">
                 </div>
             </div>
         </div>
