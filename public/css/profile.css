@@ -144,3 +144,25 @@ main{
     font-family: "Poppins";
     color: var(--beige);
 }
+
+.buttons{
+    display: flex;
+    gap: 20px;
+}
+.buttons button{
+    padding: 6px 12px;
+    outline: 0;
+    font-family: "Poppins";
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.buttons button.red{
+    background-color: #CD5449;
+    color: var(--beige);
+}
+.buttons button.green{
+    background-color: #198754;
+    color: var(--beige);
+}

@@ -3,6 +3,7 @@ const activeLink = document.querySelector("#header nav ul li a.active");
 const editButton = document.querySelector(".container .left .edit-icon");
 const containerLeft = document.querySelector(".container .left");
 const containerRight = document.querySelector(".container .right");
+const editAccount = document.querySelector(".container .edit .fields")
 
 headerLinks.forEach((link) => {
     link.addEventListener("mouseenter",() => {
@@ -19,5 +20,7 @@ headerLinks.forEach((link) => {
 });
 
 editButton.addEventListener("click", () => {
-    containerRight.style.opacity = 0;
+    containerRight.style.display = "none";
+    editAccount.style.display= "flex";
+
 })
