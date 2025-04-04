@@ -1,0 +1,72 @@
+
+CREATE DATABASE IF NOT EXISTS jogo_decisoes;
+USE jogo_decisoes;
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) UNIQUE,
+    senha VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE jogos (
+    id_jogo INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    status ENUM('Ativo','Encerrado') DEFAULT 'Ativo',
+    data_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_fim TIMESTAMP NULL,
+
+    CONSTRAINT fk_jogo_usuario FOREIGN KEY (id_usuario) 
+        REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+);
+
+
+CREATE TABLE inventario (
+    id_inventario INT AUTO_INCREMENT PRIMARY KEY,
+    id_jogo INT NOT NULL UNIQUE,
+    
+    CONSTRAINT fk_inventario_jogo FOREIGN KEY (id_jogo) 
+        REFERENCES jogos(id_jogo) ON DELETE CASCADE
+);
+
+CREATE TABLE cartoes (
+    id_cartao INT AUTO_INCREMENT PRIMARY KEY,
+    descricao TEXT NOT NULL,
+    efeito_saude FLOAT,
+    efeito_felicidade FLOAT,
+    efeito_estresse FLOAT,
+    efeito_saldo FLOAT
+);
+
+
+CREATE TABLE log_de_decisoes (
+    id_log INT AUTO_INCREMENT PRIMARY KEY,
+    id_jogo INT NOT NULL,
+    id_cartao INT NOT NULL,
+    resposta ENUM("Sim" ,"Não") default "Sim", 
+    efeito_aplicado FLOAT,
+    status_alterado  ENUM("Felicidade", "Saúde", "Estresse", "Saldo"),
+    data_decisao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_log_jogo FOREIGN KEY (id_jogo) 
+        REFERENCES jogos(id_jogo) ON DELETE CASCADE,
+    CONSTRAINT fk_log_cartao FOREIGN KEY (id_cartao) 
+        REFERENCES cartoes(id_cartao) ON DELETE CASCADE
+);
+
+
+CREATE TABLE itens_inventario (
+    id_item INT AUTO_INCREMENT PRIMARY KEY,
+    id_inventario INT NOT NULL,
+    nome_item VARCHAR(100) NOT NULL,
+    quantidade INT NOT NULL DEFAULT 1,
+    efeito_saude FLOAT,
+    efeito_felicidade FLOAT,
+    efeito_estresse FLOAT,
+    efeito_saldo FLOAT,
+    descricao TEXT,
+    
+    CONSTRAINT fk_itens_inventario FOREIGN KEY (id_inventario) 
+        REFERENCES inventario(id_inventario) ON DELETE CASCADE
+);
+
