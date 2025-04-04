@@ -130,6 +130,12 @@ main{
     padding-left: 15px;
 }
 
+.edit{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .fields{
     display: none;
     flex-direction: column;
@@ -148,6 +154,7 @@ main{
 .buttons{
     display: flex;
     gap: 20px;
+    justify-content: space-between;
 }
 .buttons button{
     padding: 6px 12px;
@@ -156,13 +163,21 @@ main{
     border-radius: 8px;
     border: none;
     cursor: pointer;
+    flex: 1;
+    transition: background-color .3s ease;
+    color: var(--beige);
 }
 
 .buttons button.red{
     background-color: #CD5449;
-    color: var(--beige);
+}
+.buttons button.red:hover{
+    background-color: #8b3831;
+
 }
 .buttons button.green{
     background-color: #198754;
-    color: var(--beige);
+}
+.buttons button.green:hover{
+    background-color: #12613c;
 }
