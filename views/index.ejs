@@ -13,8 +13,16 @@
         <% if (status == 'loggedIn') { %>
             <h2> Bem-vindo de volta, <span><%= user.nome %></span>!</h2>
             <div class="links">
-                <a href="/profile">Acessar perfil</a>
-                <a href="/logout" class="logoutButton">Sair da conta</a>
+                <div class="navigation">
+                    <a href="#">Home</a>
+                </div>
+                <div class="userLinks">
+                    <a href="/profile">Acessar perfil</a>
+                    <div class="logo">
+                        <img src="./imgs/moedinha.png" alt="">
+                    </div>
+                    <a href="/logout" class="logoutButton">Sair da conta</a>
+                </div>
             </div>
         <% } else { %>
             <h2>Bem-vindo ao <span>Mestre das Moedas</span>!</h2>

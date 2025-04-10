@@ -23,7 +23,8 @@ body{
 
 .container .links{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .container .links a{
@@ -39,6 +40,32 @@ body{
 
 .container .links a:hover{
     background-color: var(--light-blue);
+}
+
+.links .userLinks{
+    display: flex;
+    align-items: center;
+}
+
+.container .userLinks{
+    display: flex;
+    justify-content: space-between;
+}
+.container .links .navigation a{
+    width: 100%;
+    text-align: center;
+}
+
+.links .userLinks .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%)
+}
+.links .userLinks .logo img{
+    height: 40px;
 }
 
 h2{
