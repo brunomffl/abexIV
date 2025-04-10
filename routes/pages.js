@@ -5,7 +5,11 @@ const router = express.Router();
 
 router.get("/", loggedIn, (req, res) => {
     const status = req.user ? "loggedIn" : "no";
-    res.render("index", { status: status, user: req.user || "nothing" });
+    res.render("index", { status: status, user: req.user || "nada" });
+});
+
+router.get("/homepage",(req, res) => {
+    res.render("homepage");
 });
 
 router.get("/register", loggedIn, (req, res) => {
