@@ -70,9 +70,12 @@ nav ul li a {
     color: var(--beige);
     font-weight: 600;
     font-size: 25px;
-    transition: transform .3s ease;
+    transition: transform .3s ease, color .3s ease;
     display: inline-block;
 }
 nav ul li a:hover {
     transform: translateX(20px);
+}
+nav ul li a.logout:hover {
+    color: #CD5449
 }
