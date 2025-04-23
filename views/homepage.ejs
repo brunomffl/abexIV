@@ -9,7 +9,28 @@
 </head>
 <body>
 
-    <a href="/gamepage">Jogar</a>
+    <header>
+        <div class="content">
+            <a href="/homepage">
+                <img src="imgs/logoMestre.png" alt="Logo">
+            </a>
+            <p>E aí, <a href="/profile"><span><%= user.nome %></span></a>!</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li><a href="/gamepage">Jogar</a></li>
+                    <li><a href="#">Histórico</a></li>
+                    <li><a href="/profile">Meu perfil</a></li>
+                    <li><a href="/logout">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </main>
+
 
 </body>
 </html>

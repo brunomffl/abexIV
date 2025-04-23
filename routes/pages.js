@@ -8,8 +8,8 @@ router.get("/", loggedIn, (req, res) => {
     res.render("index", { status: status, user: req.user || "nada" });
 });
 
-router.get("/homepage",(req, res) => {
-    res.render("homepage");
+router.get("/homepage", loggedIn,(req, res) => {
+    res.render("homepage", { user: req.user });
 });
 
 router.get("/register", loggedIn, (req, res) => {
@@ -20,7 +20,7 @@ router.get("/login", (req, res) => {
     res.sendFile("login.html", { root: "./public" });
 });
 
-router.get("/gamepage", (req, res) => {
+router.get("/gamepage",(req, res) => {
     res.render("gamepage");
 });
 
