@@ -4,3 +4,8 @@ body{
     background-color: var(--mid-blue);
     color: var(--beige);
 }
+
+a{
+    text-decoration: none;
+    color: var(--beige);
+}
