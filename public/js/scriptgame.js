@@ -188,6 +188,18 @@ async function aplicarEfeitos(efeitos) {
 function appendNewCard() {
     if (cardCount >= cartas.length) {
         console.log("Fim das cartas!");
+        
+        // Mostrar mensagem de fim de jogo com botão para reiniciar
+        const fimDeJogo = document.createElement('div');
+        fimDeJogo.classList.add('card');
+        fimDeJogo.innerHTML = `
+            <p class="pergunta">Fim do jogo! Você completou todas as cartas.</p>
+            <button id="reiniciarJogo" style="background-color: #2c88d9; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 16px; margin-top: 20px; cursor: pointer;">Começar Novo Jogo</button>
+        `;
+        swiper.append(fimDeJogo);
+        
+        // Adicionar evento ao botão de reiniciar
+        document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
         return;
     }
 

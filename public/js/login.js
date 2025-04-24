@@ -23,11 +23,15 @@ document.querySelector('#loginForm').addEventListener('submit', (e) => {
             success.style.display = "none";
             error.style.display = "block"
             error.innerText = data.error;
-        }else{
+        } else {
             success.style.display = "block";
             error.style.display = "none"
             success.innerText = data.success;
-            console.log("Login bem-sucedido:", data);
+            
+            // Adicionar pequeno atraso para mostrar a mensagem de sucesso antes do redirecionamento
+            setTimeout(() => {
+                window.location.href = "/homepage"; // Redireciona para a página inicial
+            }, 1000); // Espera 1 segundo antes de redirecionar
         }
     }).catch((err) => {
         console.error("Failed to fetch:", err);
