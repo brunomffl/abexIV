@@ -47,7 +47,6 @@ const cartas = [
     }
 ];
 
-// Objeto jogador agora será carregado do banco de dados
 let jogador = {
     saude: 100,
     estresse: 0,
@@ -55,17 +54,13 @@ let jogador = {
     saldo: 100
 };
 
-// ID do jogo atual
 let id_jogo = null;
 
 let cardCount = 0;
 
-// Função para reiniciar o jogo
 async function reiniciarJogo() {
     try {
-        // Marcar o jogo atual como encerrado (se existir)
         if (id_jogo) {
-            // Primeiro, atualizar os dados finais
             await fetch('/api/game/jogos/atualizar', {
                 method: 'PUT',
                 headers: {
@@ -80,14 +75,12 @@ async function reiniciarJogo() {
                     card_position: cardCount
                 })
             });
-            
-            // Depois, marcar o jogo como encerrado usando o endpoint correto
+
             await fetch(`/api/game/jogos/encerrar/${id_jogo}`, {
                 method: 'PUT'
             });
         }
         
-        // Criar um novo jogo no banco de dados
         const response = await fetch('/api/game/jogos/iniciar', {
             method: 'POST',
             headers: {
@@ -95,17 +88,14 @@ async function reiniciarJogo() {
             }
         });
         
-        // Recarregar a página para iniciar tudo do zero
         window.location.reload();
     } catch (error) {
         console.error('Erro ao reiniciar jogo:', error);
     }
 }
 
-// Função para carregar o jogo ao iniciar
 async function carregarJogo() {
     try {
-        // Requisição para iniciar um jogo (retorna jogo existente ou cria um novo)
         const response = await fetch('/api/game/jogos/iniciar', {
             method: 'POST',
             headers: {
@@ -116,19 +106,15 @@ async function carregarJogo() {
         const data = await response.json();
         
         if (data.status === 'success') {
-            // Armazenar o ID do jogo
             id_jogo = data.jogo.id_jogo;
             
-            // Atualizar o objeto jogador com os valores do banco
             jogador.saude = data.jogo.saude;
             jogador.estresse = data.jogo.estresse;
             jogador.felicidade = data.jogo.felicidade;
             jogador.saldo = data.jogo.saldo;
             
-            // Carregar a posição da carta atual
             cardCount = data.jogo.card_position || 0;
             
-            // Atualizar a interface
             atualizarHUD();
             
             console.log('Jogo carregado com sucesso:', data.jogo);
@@ -140,19 +126,15 @@ async function carregarJogo() {
     }
 }
 
-// Modificar a função aplicarEfeitos para salvar no banco de dados
 async function aplicarEfeitos(efeitos) {
-    // Aplicar os efeitos localmente primeiro
     for (const atributo in efeitos) {
         if (jogador.hasOwnProperty(atributo)) {
             jogador[atributo] += efeitos[atributo];
         }
     }
     
-    // Atualizar a interface
     atualizarHUD();
     
-    // Salvar no banco de dados
     if (id_jogo) {
         try {
             const response = await fetch('/api/game/jogos/atualizar', {
@@ -189,7 +171,6 @@ function appendNewCard() {
     if (cardCount >= cartas.length) {
         console.log("Fim das cartas!");
         
-        // Mostrar mensagem de fim de jogo com botão para reiniciar
         const fimDeJogo = document.createElement('div');
         fimDeJogo.classList.add('card');
         fimDeJogo.innerHTML = `
@@ -198,7 +179,6 @@ function appendNewCard() {
         `;
         swiper.append(fimDeJogo);
         
-        // Adicionar evento ao botão de reiniciar
         document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
         return;
     }
@@ -227,7 +207,6 @@ function appendNewCard() {
     });
 }
 
-// Nova função para adicionar carta sem incrementar o contador
 function adicionarCartaSemIncrementar(indice) {
     if (indice >= cartas.length) return;
     
@@ -261,15 +240,11 @@ function atualizarHUD() {
     document.getElementById('saldo').innerText = jogador.saldo;
 }
 
-// Carregar o jogo e então iniciar as cartas
 document.addEventListener('DOMContentLoaded', () => {
     carregarJogo().then(() => {
-        // Limpar cartas existentes
         swiper.innerHTML = '';
         
-        // Verificar se já passamos por todas as cartas
         if (cardCount >= cartas.length) {
-            // Mostrar mensagem de fim de jogo com botão para reiniciar
             const fimDeJogo = document.createElement('div');
             fimDeJogo.classList.add('card');
             fimDeJogo.innerHTML = `
@@ -278,13 +253,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             swiper.append(fimDeJogo);
             
-            // Adicionar evento ao botão de reiniciar
             document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
         } else {
-            // Adicionar a carta atual (a que o jogador estava vendo antes de sair)
             adicionarCartaSemIncrementar(cardCount);
             
-            // Adicionar mais cartas para o deck (mas não a atual)
             for (let i = 1; i < 3 && cardCount + i < cartas.length; i++) {
                 adicionarCartaSemIncrementar(cardCount + i);
             }
