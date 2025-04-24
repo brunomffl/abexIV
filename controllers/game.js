@@ -59,13 +59,14 @@ exports.iniciarJogo = (req, res) => {
 };
 
 // Atualizar status do jogo
+// No método atualizarJogo, adicione card_position aos parâmetros:
 exports.atualizarJogo = (req, res) => {
     const id_jogo = req.body.id_jogo;
-    const { saude, estresse, felicidade, saldo } = req.body;
+    const { saude, estresse, felicidade, saldo, card_position } = req.body;
     
     db.query(
-        "UPDATE jogos SET saude = ?, estresse = ?, felicidade = ?, saldo = ? WHERE id_jogo = ?",
-        [saude, estresse, felicidade, saldo, id_jogo],
+        "UPDATE jogos SET saude = ?, estresse = ?, felicidade = ?, saldo = ?, card_position = ? WHERE id_jogo = ?",
+        [saude, estresse, felicidade, saldo, card_position, id_jogo],
         (err, result) => {
             if (err) {
                 console.error("Erro ao atualizar jogo:", err);
@@ -103,6 +104,27 @@ exports.obterJogoAtual = (req, res) => {
             res.json({ 
                 status: "success", 
                 jogo: result[0] 
+            });
+        }
+    );
+};
+
+// Adicionar ao controllers/game.js
+exports.encerrarJogo = (req, res) => {
+    const id_jogo = req.params.id_jogo;
+    
+    db.query(
+        "UPDATE jogos SET status = 'Encerrado', data_fim = CURRENT_TIMESTAMP WHERE id_jogo = ?",
+        [id_jogo],
+        (err, result) => {
+            if (err) {
+                console.error("Erro ao encerrar jogo:", err);
+                return res.status(500).json({ status: "error", message: "Erro ao encerrar jogo" });
+            }
+            
+            res.json({ 
+                status: "success", 
+                message: "Jogo encerrado com sucesso" 
             });
         }
     );

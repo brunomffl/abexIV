@@ -7,5 +7,6 @@ const router = express.Router();
 router.post("/jogos/iniciar", loggedIn, gameController.iniciarJogo);
 router.put("/jogos/atualizar", loggedIn, gameController.atualizarJogo);
 router.get("/jogos/atual", loggedIn, gameController.obterJogoAtual);
+router.put("/jogos/encerrar/:id_jogo", loggedIn, gameController.encerrarJogo);
 
 module.exports = router;

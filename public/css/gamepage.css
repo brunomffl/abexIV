@@ -109,3 +109,20 @@ html, body {
 #hud a:hover{
     background-color: var(--light-blue);
 }
+
+/* Adicionar ao gamepage.css */
+.botao-reiniciar {
+    background-color: var(--mid-blue);
+    color: var(--beige);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.botao-reiniciar:hover {
+    background-color: var(--light-blue);
+}
