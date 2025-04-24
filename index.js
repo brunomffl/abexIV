@@ -21,4 +21,5 @@ db.connect((error) => {
 })
 app.use("/", require("./routes/pages"));
 app.use("/api", require("./controllers/auth"));
+app.use("/api/game", require("./routes/api"))
 app.listen(PORT)

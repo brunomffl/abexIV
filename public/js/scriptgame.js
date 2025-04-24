@@ -47,21 +47,95 @@ const cartas = [
     }
 ];
 
-const jogador = {
+// Objeto jogador agora será carregado do banco de dados
+let jogador = {
     saude: 100,
     estresse: 0,
     felicidade: 50,
     saldo: 100
 };
 
+// ID do jogo atual
+let id_jogo = null;
+
 let cardCount = 0;
 
-function aplicarEfeitos(efeitos) {
+// Função para carregar o jogo ao iniciar
+async function carregarJogo() {
+    try {
+        // Requisição para iniciar um jogo (retorna jogo existente ou cria um novo)
+        const response = await fetch('/api/game/jogos/iniciar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            // Armazenar o ID do jogo
+            id_jogo = data.jogo.id_jogo;
+            
+            // Atualizar o objeto jogador com os valores do banco
+            jogador.saude = data.jogo.saude;
+            jogador.estresse = data.jogo.estresse;
+            jogador.felicidade = data.jogo.felicidade;
+            jogador.saldo = data.jogo.saldo;
+            
+            // Atualizar a interface
+            atualizarHUD();
+            
+            console.log('Jogo carregado com sucesso:', data.jogo);
+        } else {
+            console.error('Erro ao carregar jogo:', data.message);
+        }
+    } catch (error) {
+        console.error('Erro ao comunicar com o servidor:', error);
+    }
+}
+
+// Modificar a função aplicarEfeitos para salvar no banco de dados
+async function aplicarEfeitos(efeitos) {
+    // Aplicar os efeitos localmente primeiro
     for (const atributo in efeitos) {
         if (jogador.hasOwnProperty(atributo)) {
             jogador[atributo] += efeitos[atributo];
         }
     }
+    
+    // Atualizar a interface
+    atualizarHUD();
+    
+    // Salvar no banco de dados
+    if (id_jogo) {
+        try {
+            const response = await fetch('/api/game/jogos/atualizar', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_jogo: id_jogo,
+                    saude: jogador.saude,
+                    estresse: jogador.estresse,
+                    felicidade: jogador.felicidade,
+                    saldo: jogador.saldo
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                console.log('Jogo atualizado com sucesso');
+            } else {
+                console.error('Erro ao atualizar jogo:', data.message);
+            }
+        } catch (error) {
+            console.error('Erro ao comunicar com o servidor:', error);
+        }
+    }
+    
     console.log("Estado atual:", jogador);
 }
 
@@ -95,10 +169,6 @@ function appendNewCard() {
     });
 }
 
-for (let i = 0; i < 3; i++) {
-    appendNewCard();
-}
-
 function atualizarHUD() {
     document.getElementById('saude').innerText = jogador.saude;
     document.getElementById('estresse').innerText = jogador.estresse;
@@ -106,10 +176,19 @@ function atualizarHUD() {
     document.getElementById('saldo').innerText = jogador.saldo;
 }
 
-const aplicarEfeitos_original = aplicarEfeitos;
-aplicarEfeitos = function(efeitos) {
-    aplicarEfeitos_original(efeitos);
-    atualizarHUD();
-};
+// Remover este trecho que sobrescreve a função original
+// const aplicarEfeitos_original = aplicarEfeitos;
+// aplicarEfeitos = function(efeitos) {
+//     aplicarEfeitos_original(efeitos);
+//     atualizarHUD();
+// };
 
-document.addEventListener('DOMContentLoaded', atualizarHUD);
+// Carregar o jogo e então iniciar as cartas
+document.addEventListener('DOMContentLoaded', () => {
+    carregarJogo().then(() => {
+        // Depois que o jogo for carregado, iniciar as cartas
+        for (let i = 0; i < 3; i++) {
+            appendNewCard();
+        }
+    });
+});

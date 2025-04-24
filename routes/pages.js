@@ -20,8 +20,11 @@ router.get("/login", (req, res) => {
     res.sendFile("login.html", { root: "./public" });
 });
 
-router.get("/gamepage",(req, res) => {
-    res.render("gamepage");
+router.get("/gamepage", loggedIn, (req, res) => {
+    if (!req.user) {
+        return res.redirect("/login")
+    }
+    res.render("gamepage", { user: req.user });
 });
 
 router.get("/profile", loggedIn, (req, res) => {
