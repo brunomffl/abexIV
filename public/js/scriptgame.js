@@ -16,7 +16,7 @@ const cartas = [
         nao: { saude: -10 }
     },
     {
-        texto: "Depois de um longo dia de trabalho você está uma pilha de nervos! Assistir TV para desestressar?\n\n➡️ Sim: Estresse -10\n⬅️ Não: Estresse +10",
+        texto: "Depois de um longo dia de trabalho você está uma pilha de nervos! Assistir TV para desestressar?\n\n➡️ Sim: Estresse -10\n⬅️ Não: Estresse +100",
         local: "Casa",
         sim: { estresse: -10 },
         nao: { estresse: +10 }
@@ -44,6 +44,18 @@ const cartas = [
         local: "Trabalho",
         sim: { felicidade: +20, saldo: -40 },
         nao: {}
+    },
+    {
+        texto: "teste saude\n\n➡️ Sim: Saude +100 /\n⬅️ Não: Saude -100",
+        local: "Trabalho",
+        sim: { saude: +100},
+        nao: {saude: -100}
+    },
+    {
+        texto: "teste felicidade\n\n➡️ Sim: felicidade +100 /\n⬅️ Não: felicidade -100",
+        local: "Trabalho",
+        sim: { felicidade: +100},
+        nao: { felicidade: -100}
     }
 ];
 
@@ -130,11 +142,25 @@ async function aplicarEfeitos(efeitos) {
     for (const atributo in efeitos) {
         if (jogador.hasOwnProperty(atributo)) {
             jogador[atributo] += efeitos[atributo];
+            if (jogador[atributo] < 0) {
+                jogador[atributo] = 0;
+            }
+            if (jogador["saude"] > 100){
+                jogador["saude"] = 100;
+            }
+            if (jogador["estresse"] > 100){
+                jogador["estresse"] = 100;
+            }
+            if (jogador["felicidade"] > 100){
+                jogador["felicidade"] = 100;
+            }
         }
     }
-    
+
     atualizarHUD();
-    
+
+    encerrarJogo();
+
     if (id_jogo) {
         try {
             const response = await fetch('/api/game/jogos/atualizar', {
@@ -168,23 +194,63 @@ async function aplicarEfeitos(efeitos) {
 }
 
 function appendNewCard() {
+    // Checa primeiro se perdeu por estatística
+    if (jogador.estresse >= 100) {
+        const fimDeJogo = document.createElement('div');
+        fimDeJogo.classList.add('card');
+        fimDeJogo.innerHTML = `
+            <p class="pergunta">Fim do jogo! Você teve um ataque cardiaco.</p>
+            <button id="reiniciarJogo" style="background-color:rgb(229, 26, 26); color: white; border: none; padding: 20px 130px; border-radius: 8px; font-size: 16px; margin-bottom:-32px; cursor: pointer;">Começar Novo Jogo</button>
+        `;
+        swiper.append(fimDeJogo);
+        document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
+        return;
+    } else if (jogador.felicidade <= 0) {
+        const fimDeJogo = document.createElement('div');
+        fimDeJogo.classList.add('card');
+        fimDeJogo.innerHTML = `
+            <p class="pergunta">Fim do jogo! Você adquiriu depressão.</p>
+            <button id="reiniciarJogo" style="background-color:rgb(0, 0, 0); color: white; border: none; padding: 20px 130px; border-radius: 8px; font-size: 16px; margin-bottom:-32px; cursor: pointer;">Começar Novo Jogo</button>
+        `;
+        swiper.append(fimDeJogo);
+        document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
+        return;
+    } else if (jogador.saldo <= 0) {
+        const fimDeJogo = document.createElement('div');
+        fimDeJogo.classList.add('card');
+        fimDeJogo.innerHTML = `
+            <p class="pergunta">Fim do jogo! Você faliu.</p>
+            <button id="reiniciarJogo" style="background-color:rgb(212, 225, 28); color: white; border: none; padding: 20px 130px; border-radius: 8px; font-size: 16px; margin-bottom:-32px;; cursor: pointer;">Começar Novo Jogo</button>
+        `;
+        swiper.append(fimDeJogo);
+        document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
+        return;
+    } else if (jogador.saude <= 0) {
+        const fimDeJogo = document.createElement('div');
+        fimDeJogo.classList.add('card');
+        fimDeJogo.innerHTML = `
+            <p class="pergunta">Fim do jogo! Sua saúde chegou a zero.</p>
+            <button id="reiniciarJogo" style="background-color:rgb(125, 121, 121); color: white; border: none; padding: 20px 130px; border-radius: 8px; font-size: 16px; margin-bottom:-32px; cursor: pointer;">Começar Novo Jogo</button>
+        `;
+        swiper.append(fimDeJogo);
+        document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
+        return;
+    }
+
+    // Só mostra fim por completar cartas se não perdeu por estatística
     if (cardCount >= cartas.length) {
-        console.log("Fim das cartas!");
-        
         const fimDeJogo = document.createElement('div');
         fimDeJogo.classList.add('card');
         fimDeJogo.innerHTML = `
             <p class="pergunta">Fim do jogo! Você completou todas as cartas.</p>
-            <button id="reiniciarJogo" style="background-color: #2c88d9; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 16px; margin-top: 20px; cursor: pointer;">Começar Novo Jogo</button>
+            <button id="reiniciarJogo" style="background-color: #2c88d9; color: white; border: none; padding: 20px 130px; border-radius: 8px; font-size: 16px; margin-bottom:-32px; cursor: pointer;">Começar Novo Jogo</button>
         `;
         swiper.append(fimDeJogo);
-        
         document.getElementById('reiniciarJogo').addEventListener('click', reiniciarJogo);
         return;
     }
 
     const cardAtual = cartas[cardCount];
-
     const card = new Card({
         imageUrl: cardAtual.texto,
         onDismiss: appendNewCard,
@@ -238,6 +304,17 @@ function atualizarHUD() {
     document.getElementById('estresse').innerText = jogador.estresse;
     document.getElementById('felicidade').innerText = jogador.felicidade;
     document.getElementById('saldo').innerText = jogador.saldo;
+}
+
+function encerrarJogo() {
+    if (
+        jogador.estresse < 0 ||
+        jogador.felicidade <= 0 ||
+        jogador.saldo <= 0 ||
+        jogador.saude <= 0
+    ) {
+        cardCount = cartas.length;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

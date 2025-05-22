@@ -37,7 +37,8 @@ html, body {
     transition: transform 0.5s;
     background-color: white;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     padding: 2rem;
     text-align: center;
