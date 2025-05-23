@@ -27,11 +27,9 @@ document.querySelector('#loginForm').addEventListener('submit', (e) => {
             success.style.display = "block";
             error.style.display = "none"
             success.innerText = data.success;
-            
-            // Adicionar pequeno atraso para mostrar a mensagem de sucesso antes do redirecionamento
             setTimeout(() => {
-                window.location.href = "/homepage"; // Redireciona para a página inicial
-            }, 1000); // Espera 1 segundo antes de redirecionar
+                window.location.href = "/homepage"; 
+            }, 1000);
         }
     }).catch((err) => {
         console.error("Failed to fetch:", err);
