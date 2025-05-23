@@ -126,7 +126,8 @@ async function carregarJogo() {
             jogador.saldo = data.jogo.saldo;
             
             cardCount = data.jogo.card_position || 0;
-            
+
+            diaNoite();
             atualizarHUD();
             
             console.log('Jogo carregado com sucesso:', data.jogo);
@@ -139,6 +140,7 @@ async function carregarJogo() {
 }
 
 async function aplicarEfeitos(efeitos) {
+    diaNoite();
     for (const atributo in efeitos) {
         if (jogador.hasOwnProperty(atributo)) {
             jogador[atributo] += efeitos[atributo];
@@ -156,7 +158,6 @@ async function aplicarEfeitos(efeitos) {
             }
         }
     }
-
     atualizarHUD();
 
     encerrarJogo();
@@ -304,6 +305,24 @@ function atualizarHUD() {
     document.getElementById('estresse').innerText = jogador.estresse;
     document.getElementById('felicidade').innerText = jogador.felicidade;
     document.getElementById('saldo').innerText = jogador.saldo;
+}
+
+function diaNoite() {
+    const dia = document.getElementById('dia');
+    const noite = document.getElementById('noite');
+
+    if (dia && noite) {
+        if (cardCount >= 0 && cardCount < 6) {
+            dia.style.opacity = 1;
+            noite.style.opacity = 0;
+        } else if (cardCount >= 6) {
+            dia.style.opacity = 0;
+            noite.style.opacity = 1;
+        } else {
+            dia.style.opacity = 0;
+            noite.style.opacity = 0;
+        }
+    }
 }
 
 function encerrarJogo() {
