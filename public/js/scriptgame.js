@@ -315,12 +315,10 @@ function diaNoite() {
         if (cardCount >= 0 && cardCount < 6) {
             dia.style.opacity = 1;
             noite.style.opacity = 0;
-        } else if (cardCount >= 6) {
-            dia.style.opacity = 0;
-            noite.style.opacity = 1;
         } else {
             dia.style.opacity = 0;
-            noite.style.opacity = 0;
+            noite.style.opacity = 1;
+            document.body.style.backgroundColor = "black";
         }
     }
 }

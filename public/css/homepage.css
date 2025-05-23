@@ -1,5 +1,26 @@
 @import url(general.css);
 
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Fica atrás de tudo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.background img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Preenche e centraliza */
+    object-position: center;
+    filter: brightness(0.7); /* Opcional: escurece para melhor contraste */
+}
+
 body {
     background-color: var(--mid-blue);
     color: var(--beige);
