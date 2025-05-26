@@ -59,7 +59,6 @@ exports.iniciarJogo = (req, res) => {
 };
 
 // Atualizar status do jogo
-// No método atualizarJogo, adicione card_position aos parâmetros:
 exports.atualizarJogo = (req, res) => {
     const id_jogo = req.body.id_jogo;
     const { saude, estresse, felicidade, saldo, card_position } = req.body;
@@ -109,7 +108,7 @@ exports.obterJogoAtual = (req, res) => {
     );
 };
 
-// Adicionar ao controllers/game.js
+// Encerrar jogo
 exports.encerrarJogo = (req, res) => {
     const id_jogo = req.params.id_jogo;
     
@@ -126,6 +125,233 @@ exports.encerrarJogo = (req, res) => {
                 status: "success", 
                 message: "Jogo encerrado com sucesso" 
             });
+        }
+    );
+};
+
+// Obter inventário do jogador
+exports.obterInventario = (req, res) => {
+    const id_jogo = req.params.id_jogo;
+    
+    db.query(
+        `SELECT i.*, ii.usos_restantes, ii.cooldown_atual, ii.id_item_inventario
+         FROM itens_inventario ii
+         JOIN itens i ON ii.id_item = i.id_item
+         WHERE ii.id_jogo = ?`,
+        [id_jogo],
+        (err, result) => {
+            if (err) {
+                console.error('Erro ao obter inventário:', err);
+                return res.status(500).json({ status: "error", message: "Erro ao obter inventário" });
+            }
+            res.json({ status: "success", itens: result });
+        }
+    );
+};
+
+// Função adicionarItem melhorada para evitar duplicatas e limitar o inventário
+exports.adicionarItem = (req, res) => {
+    const id_jogo = req.params.id_jogo;
+    const { id_item } = req.body;
+    
+    // Primeiro verificar se o jogador já tem muitos itens (limite: 6)
+    db.query('SELECT COUNT(*) as total FROM itens_inventario WHERE id_jogo = ?', 
+        [id_jogo], 
+        (err, countResult) => {
+            if (err) {
+                return res.status(500).json({ 
+                    status: "error", 
+                    message: "Erro ao verificar inventário" 
+                });
+            }
+            
+            const totalItens = countResult[0].total;
+            if (totalItens >= 6) {
+                return res.json({ 
+                    status: "error", 
+                    message: "Inventário cheio! (Máximo: 6 itens)" 
+                });
+            }
+            
+            // Verificar se o jogador já tem este item
+            db.query('SELECT * FROM itens_inventario WHERE id_jogo = ? AND id_item = ?',
+                [id_jogo, id_item],
+                (err, existResult) => {
+                    if (err) {
+                        return res.status(500).json({ 
+                            status: "error", 
+                            message: "Erro ao verificar item existente" 
+                        });
+                    }
+                    
+                    // Se já tem o item, apenas incrementar os usos (até um limite)
+                    if (existResult.length > 0) {
+                        // Verificar se o item é um consumível antes de permitir acumular
+                        db.query('SELECT * FROM itens WHERE id_item = ?', [id_item], 
+                            (err, itemResult) => {
+                                if (err || itemResult.length === 0) {
+                                    return res.status(404).json({ 
+                                        status: "error", 
+                                        message: "Item não encontrado" 
+                                    });
+                                }
+                                
+                                const item = itemResult[0];
+                                const existingItem = existResult[0];
+                                
+                                // Para consumíveis, permitir acumular até 3 usos
+                                if (item.tipo === 'Consumível' && existingItem.usos_restantes < 3) {
+                                    db.query(
+                                        'UPDATE itens_inventario SET usos_restantes = usos_restantes + ? WHERE id_item_inventario = ?',
+                                        [item.usos_maximos, existingItem.id_item_inventario],
+                                        (err) => {
+                                            if (err) {
+                                                return res.status(500).json({ 
+                                                    status: "error", 
+                                                    message: "Erro ao atualizar item" 
+                                                });
+                                            }
+                                            
+                                            res.json({ 
+                                                status: "success", 
+                                                message: "Item atualizado no inventário" 
+                                            });
+                                        }
+                                    );
+                                } else {
+                                    // Para equipamentos ou se já tem o máximo, informar ao jogador
+                                    res.json({ 
+                                        status: "success", 
+                                        message: "Você já tem este item" 
+                                    });
+                                }
+                            }
+                        );
+                    } else {
+                        // Se não tem o item, adicionar normalmente
+                        db.query('SELECT * FROM itens WHERE id_item = ?', [id_item], 
+                            (err, result) => {
+                                if (err || result.length === 0) {
+                                    return res.status(404).json({ 
+                                        status: "error", 
+                                        message: "Item não encontrado" 
+                                    });
+                                }
+                                
+                                const item = result[0];
+                                
+                                db.query(
+                                    'INSERT INTO itens_inventario (id_jogo, id_item, usos_restantes) VALUES (?, ?, ?)',
+                                    [id_jogo, id_item, item.usos_maximos],
+                                    (err) => {
+                                        if (err) {
+                                            return res.status(500).json({ 
+                                                status: "error", 
+                                                message: "Erro ao adicionar item" 
+                                            });
+                                        }
+                                        
+                                        res.json({ 
+                                            status: "success", 
+                                            message: "Item adicionado ao inventário" 
+                                        });
+                                    }
+                                );
+                            }
+                        );
+                    }
+                }
+            );
+        }
+    );
+};
+
+// Usar item do inventário
+exports.usarItem = (req, res) => {
+    const id_jogo = req.params.id_jogo;
+    const { id_item_inventario } = req.body;
+    
+    // Obter dados do item
+    db.query(
+        `SELECT i.*, ii.usos_restantes, ii.id_item_inventario
+         FROM itens_inventario ii
+         JOIN itens i ON ii.id_item = i.id_item
+         WHERE ii.id_item_inventario = ? AND ii.id_jogo = ?`,
+        [id_item_inventario, id_jogo],
+        (err, result) => {
+            if (err || result.length === 0) {
+                return res.status(404).json({ status: "error", message: "Item não encontrado no inventário" });
+            }
+            
+            const item = result[0];
+            const novoUsosRestantes = item.usos_restantes - 1;
+            
+            // Se for o último uso, remover do inventário
+            if (novoUsosRestantes <= 0) {
+                db.query(
+                    'DELETE FROM itens_inventario WHERE id_item_inventario = ?',
+                    [id_item_inventario],
+                    (err) => {
+                        if (err) {
+                            return res.status(500).json({ status: "error", message: "Erro ao usar item" });
+                        }
+                        
+                        // Retornar os efeitos para aplicar no jogo
+                        res.json({ 
+                            status: "success", 
+                            message: "Item usado e removido do inventário", 
+                            efeitos: {
+                                saude: item.efeito_saude,
+                                estresse: item.efeito_estresse,
+                                felicidade: item.efeito_felicidade,
+                                saldo: item.efeito_saldo
+                            }
+                        });
+                    }
+                );
+            } else {
+                // Atualizar quantidade de usos
+                db.query(
+                    'UPDATE itens_inventario SET usos_restantes = ? WHERE id_item_inventario = ?',
+                    [novoUsosRestantes, id_item_inventario],
+                    (err) => {
+                        if (err) {
+                            return res.status(500).json({ status: "error", message: "Erro ao atualizar item" });
+                        }
+                        
+                        // Retornar os efeitos para aplicar no jogo
+                        res.json({ 
+                            status: "success", 
+                            message: "Item usado", 
+                            efeitos: {
+                                saude: item.efeito_saude,
+                                estresse: item.efeito_estresse,
+                                felicidade: item.efeito_felicidade,
+                                saldo: item.efeito_saldo
+                            }
+                        });
+                    }
+                );
+            }
+        }
+    );
+};
+
+// Obter item aleatório
+exports.obterItemAleatorio = (req, res) => {
+    db.query(
+        'SELECT * FROM itens ORDER BY RAND() LIMIT 1',
+        (err, result) => {
+            if (err) {
+                console.error('Erro ao obter item aleatório:', err);
+                return res.status(500).json({ status: "error", message: "Erro ao obter item" });
+            }
+            
+            if (result.length === 0) {
+                return res.status(404).json({ status: "error", message: "Nenhum item encontrado" });
+            }
+            
+            res.json({ status: "success", item: result[0] });
         }
     );
 };

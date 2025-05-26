@@ -10,5 +10,9 @@ router.put("/jogos/atualizar", loggedIn, gameController.atualizarJogo);
 router.get("/jogos/atual", loggedIn, gameController.obterJogoAtual);
 router.put("/jogos/encerrar/:id_jogo", loggedIn, gameController.encerrarJogo);
 router.put("/usuario/atualizar", loggedIn, atualizarPerfil);
+router.get("/jogos/:id_jogo/inventario", loggedIn, gameController.obterInventario);
+router.post("/jogos/:id_jogo/inventario", loggedIn, gameController.adicionarItem);
+router.post("/jogos/:id_jogo/inventario/usar", loggedIn, gameController.usarItem);
+router.get("/itens/aleatorio", gameController.obterItemAleatorio);
 
 module.exports = router;

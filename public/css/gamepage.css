@@ -154,3 +154,110 @@ html, body {
     padding: 0.1rem 0.1 rem;
     border-radius: 40px;
 }
+
+/* Adicione ao final do arquivo: */
+
+/* Estilo para o sistema de inventário */
+#inventario {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+#toggle-inventario {
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--beige);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+#toggle-inventario:hover {
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#inventario-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background-color: rgba(1, 22, 30, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    min-width: 250px;
+    z-index: 100;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform-origin: bottom right;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#inventario-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#inventario-panel li {
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: rgba(89, 131, 146, 0.2);
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+#inventario-panel li:hover {
+    background-color: rgba(89, 131, 146, 0.4);
+    transform: translateX(-5px);
+}
+
+.pegar-item {
+    background-color: var(--light-blue);
+    color: var(--beige);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pegar-item:hover {
+    background-color: var(--mid-blue);
+    transform: scale(1.05);
+}
+
+.pegar-item:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Melhorar efeito de dismissal das cartas */
+.dismissing {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    transform: translateX(100px) rotate(10deg) !important;
+    opacity: 0;
+    pointer-events: none;
+}
