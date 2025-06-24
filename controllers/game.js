@@ -129,6 +129,22 @@ exports.encerrarJogo = (req, res) => {
     );
 };
 
+exports.obterHistorico = (req, res) => {
+    const id_usuario = req.user.id_usuario;
+
+    db.query(
+        "SELECT *, DATE_FORMAT(data_inicio, '%d/%m/%Y %H:%i') as data_inicio_formatada, DATE_FORMAT(data_fim, '%d/%m/%Y %H:%i') as data_fim_formatada FROM jogos WHERE id_usuario = ? ORDER BY data_inicio DESC",
+        [id_usuario],
+        (err, result) => {
+            if (err) {
+                console.error("Erro ao buscar histórico de jogos:", err);
+                return res.status(500).json({ status: "error", message: "Erro ao buscar histórico" });
+            }
+            res.json({ status: "success", jogos: result });
+        }
+    );
+};
+
 // Obter inventário do jogador
 exports.obterInventario = (req, res) => {
     const id_jogo = req.params.id_jogo;

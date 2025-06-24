@@ -27,6 +27,14 @@ router.get("/gamepage", loggedIn, (req, res) => {
     res.render("gamepage", { user: req.user });
 });
 
+router.get("/historico", loggedIn, (req, res) => {
+    if (req.user) {
+        res.render("historico", { user: req.user });
+    } else {
+        res.redirect("/login");
+    }
+});
+
 router.get("/profile", loggedIn, (req, res) => {
     const user = req.user;
     res.render("profile", { user: user });

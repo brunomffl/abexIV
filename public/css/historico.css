@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --dark-blue: #011640;
+    --mid-blue: #022A73;
+    --light-blue: #033E8C;
+    --beige: #A69B8F;
+    --white: #F2F2F2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
+
+header {
+    background-color: #01102e;
+    padding: 10px 40px;
+    border-bottom: 2px solid var(--light-blue);
+}
+
+header .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header .content img {
+    width: 120px;
+}
+
+header .content p {
+    font-size: 1.1rem;
+}
+
+header .content a {
+    text-decoration: none;
+    color: var(--white);
+    font-weight: 600;
+}
+
+header .content span {
+    color: var(--beige);
+    text-decoration: underline;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.historico-container {
+    background-color: var(--mid-blue);
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--light-blue);
+    padding-bottom: 15px;
+}
+
+#lista-historico {
+    list-style: none;
+}
+
+.item-historico {
+    background-color: #011a4a;
+    border: 1px solid var(--light-blue);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.item-historico p {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.item-historico strong {
+    color: var(--beige);
+}
+
+.sem-historico {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 20px;
+}

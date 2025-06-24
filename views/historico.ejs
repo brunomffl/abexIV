@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Jogos</title>
+    <link rel="shortcut icon" href="/imgs/moedinha.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/historico.css">
+</head>
+<body>
+    <header>
+        <div class="content">
+            <a href="/homepage">
+                <img src="imgs/logoMestre.png" alt="Logo">
+            </a>
+            <p>E aí, <a href="/profile"><span><%= user.nome %></span></a>!</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="historico-container">
+            <h1>Histórico de Partidas</h1>
+            <ul id="lista-historico">
+                <!-- O histórico será inserido aqui pelo historico.js -->
+            </ul>
+        </div>
+    </main>
+
+    <script src="/js/historico.js"></script>
+</body>
+</html>

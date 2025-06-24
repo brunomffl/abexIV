@@ -8,6 +8,7 @@ const atualizarPerfil = require("../controllers/profile");
 router.post("/jogos/iniciar", loggedIn, gameController.iniciarJogo);
 router.put("/jogos/atualizar", loggedIn, gameController.atualizarJogo);
 router.get("/jogos/atual", loggedIn, gameController.obterJogoAtual);
+router.get("/jogos/historico", loggedIn, gameController.obterHistorico);
 router.put("/jogos/encerrar/:id_jogo", loggedIn, gameController.encerrarJogo);
 router.put("/usuario/atualizar", loggedIn, atualizarPerfil);
 router.get("/jogos/:id_jogo/inventario", loggedIn, gameController.obterInventario);
