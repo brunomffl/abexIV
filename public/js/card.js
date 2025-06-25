@@ -1,64 +1,73 @@
+
 class Card {
     constructor({ imageUrl, onDismiss, onLike, onDislike }) {
-        this.imageUrl = imageUrl;
         this.onDismiss = onDismiss;
         this.onLike = onLike;
         this.onDislike = onDislike;
-        this.#init();
-    }
-
-    #startPoint;
-    #offsetX;
-    #element;
-
-    #init() {
-        const card = document.createElement("div");
-        card.classList.add("card");
-
-        const texto = document.createElement("p");
-        texto.innerText = this.imageUrl;
-        texto.classList.add("pergunta");
-        card.appendChild(texto);
-
-        this.#element = card;
+        this.element = this.#createCardElement(imageUrl);
         this.#listenToMouseEvents();
     }
 
-    #listenToMouseEvents() {
-        const card = this.#element;
+    #createCardElement = (text) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        const p = document.createElement('p');
+        p.classList.add('pergunta');
+        p.innerHTML = text.replace(/\n/g, '<br>');
+        card.appendChild(p);
+        return card;
+    }
 
-        const gestureZone = card;
-        gestureZone.addEventListener("pointerdown", (event) => {
-            this.#startPoint = event.clientX;
-            gestureZone.setPointerCapture(event.pointerId);
-        });
+    #listenToMouseEvents = () => {
+        let startX = 0;
+        
+        const onMouseDown = (e) => {
+            startX = e.clientX;
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        };
 
-        gestureZone.addEventListener("pointermove", (event) => {
-            if (!this.#startPoint) return;
-            this.#offsetX = event.clientX - this.#startPoint;
-            this.#element.style.transform = `translateX(${this.#offsetX}px) rotate(${this.#offsetX * 0.05}deg)`;
-        });
+        const onMouseMove = (e) => {
+            if (e.buttons === 0) {
+                onMouseUp(e);
+                return;
+            }
+            const currentX = e.clientX;
+            const diffX = currentX - startX;
+            this.element.style.transform = `translateX(${diffX}px) rotate(${diffX * 0.1}deg)`;
+        };
 
-        gestureZone.addEventListener("pointerup", () => {
-            this.#startPoint = null;
-            this.#element.style.transform = "";
+        const onMouseUp = (e) => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            
+            const endX = e.clientX;
+            const diffX = endX - startX;
 
-            const decisionMade = Math.abs(this.#offsetX) > 150;
-            if (decisionMade) {
-                this.#element.remove();
-                this.onDismiss();
-                if (this.#offsetX > 0) {
+            if (Math.abs(diffX) > 100) { // Limite para o swipe
+                this.element.classList.add('dismissing');
+                this.element.style.transform = `translateX(${diffX > 0 ? 500 : -500}px) rotate(${diffX > 0 ? 20 : -20}deg)`;
+                
+                if (diffX > 0) {
                     this.onLike();
                 } else {
                     this.onDislike();
                 }
+                
+                setTimeout(() => {
+                    this.onDismiss();
+                    this.element.remove();
+                }, 300);
+
+            } else {
+                this.element.style.transition = 'transform 0.3s';
+                this.element.style.transform = '';
+                setTimeout(() => {
+                    this.element.style.transition = '';
+                }, 300);
             }
-
-        this.#offsetX = 0;
-        });
-    }
-
-    get element() {
-        return this.#element;
+        };
+        
+        this.element.addEventListener('mousedown', onMouseDown);
     }
 }
