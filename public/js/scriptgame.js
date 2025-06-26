@@ -2,11 +2,10 @@ const swiper = document.querySelector('#swiper');
 const like = document.querySelector('#like');
 const dislike = document.querySelector('#dislike');
 
-// SUBSTITUA SEU cartasGrupos ANTIGO POR ESTE BLOCO COMPLETO
 const cartasGrupos = {
-    // ==================================================
-    // GRUPOS DE EVENTOS FIXOS (1 CARTA POR DIA)
-    // ==================================================
+    // =============================================================
+    // EVENTOS FIXOS DO DIA (1 carta por vez, mas várias opções)
+    // =============================================================
 
     // --- MANHÃ ---
     acordar_higiene: [
@@ -19,8 +18,29 @@ const cartasGrupos = {
             tags: ["manha", "higiene"],
             incompativel_com: [],
             itens_compativeis: ["energetico", "cafe"]
+        },
+        {
+            id: 201,
+            texto: "Seu alarme toca incessantemente. Você está atrasado! Tomar um banho rápido ou só escovar os dentes e sair correndo?\n\n➡️ Banho rápido: Saúde +3, Estresse +5\n⬅️ Só escovar dentes: Estresse +10",
+            local: "Casa",
+            sim: { saude: 3, estresse: 5 },
+            nao: { estresse: 10 },
+            tags: ["manha", "higiene"],
+            incompativel_com: [],
+            itens_compativeis: ["despertador", "shampoo"]
+        },
+        {
+            id: 202,
+            texto: "Você acordou antes do alarme, se sentindo descansado. Aproveitar para fazer alguns alongamentos ou ficar mais tempo na cama?\n\n➡️ Alongamentos: Saúde +8, Felicidade +5\n⬅️ Ficar na cama: Felicidade +3",
+            local: "Casa",
+            sim: { saude: 8, felicidade: 5 },
+            nao: { felicidade: 3 },
+            tags: ["manha", "higiene"],
+            incompativel_com: [],
+            itens_compativeis: ["tapete_yoga"]
         }
     ],
+
     cafe_da_manha: [
         {
             id: 11,
@@ -31,8 +51,29 @@ const cartasGrupos = {
             tags: ["manha", "alimentacao"],
             incompativel_com: [],
             itens_compativeis: ["vitamina", "cereais"]
+        },
+        {
+            id: 211,
+            texto: "Você está sem nada na geladeira. Pedir delivery de um café da manhã ou ir trabalhar em jejum?\n\n➡️ Delivery: Saúde +5, Saldo -25\n⬅️ Jejum: Saúde -10, Estresse +15",
+            local: "Casa",
+            sim: { saude: 5, saldo: -25 },
+            nao: { saude: -10, estresse: 15 },
+            tags: ["manha", "alimentacao"],
+            incompativel_com: ["pouco_dinheiro"],
+            itens_compativeis: ["barra_cereal", "vitamina"]
+        },
+        {
+            id: 212,
+            texto: "Seu vizinho fez um bolo delicioso e te ofereceu um pedaço. Aceitar a gentileza ou recusar educadamente?\n\n➡️ Aceitar: Felicidade +15, Saúde -5\n⬅️ Recusar: Felicidade -5, Saúde +5",
+            local: "Casa",
+            sim: { felicidade: 15, saude: -5 },
+            nao: { felicidade: -5, saude: 5 },
+            tags: ["manha", "alimentacao", "social"],
+            incompativel_com: [],
+            itens_compativeis: []
         }
     ],
+
     transporte_trabalho: [
         {
             id: 13,
@@ -43,6 +84,16 @@ const cartasGrupos = {
             tags: ["manha", "transporte"],
             incompativel_com: [],
             itens_compativeis: ["carteira", "dinheiro"]
+        },
+        {
+            id: 213,
+            texto: "Choveu durante a noite e há várias poças no caminho. Ir caminhando mesmo assim ou gastar com transporte?\n\n➡️ Caminhar: Saúde -5, Estresse +10\n⬅️ Transporte: Saldo -10",
+            local: "Casa",
+            sim: { saude: -5, estresse: 10 },
+            nao: { saldo: -10 },
+            tags: ["manha", "transporte"],
+            incompativel_com: [],
+            itens_compativeis: ["guarda_chuva", "sapato_impermeavel"]
         }
     ],
 
@@ -57,6 +108,26 @@ const cartasGrupos = {
             tags: ["tarde", "alimentacao"],
             incompativel_com: ["pouco_dinheiro"],
             itens_compativeis: ["comida_congelada", "dinheiro_extra"]
+        },
+        {
+            id: 301,
+            texto: "Um colega te convidou para experimentar um restaurante japonês novo. É caro, mas parece incrível. Ir junto?\n\n➡️ Ir: Felicidade +20, Saldo -45\n⬅️ Dispensar: Felicidade -5, Saldo +5",
+            local: "Trabalho",
+            sim: { felicidade: 20, saldo: -45 },
+            nao: { felicidade: -5, saldo: 5 },
+            tags: ["tarde", "alimentacao", "social"],
+            incompativel_com: ["pouco_dinheiro"],
+            itens_compativeis: ["cartao_credito"]
+        },
+        {
+            id: 302,
+            texto: "A máquina de lanches quebrou e você só tem 30 minutos de almoço. Sair para comprar algo ou ficar sem comer?\n\n➡️ Sair: Estresse +15, Saldo -20\n⬅️ Ficar sem comer: Saúde -15, Estresse +10",
+            local: "Trabalho",
+            sim: { estresse: 15, saldo: -20 },
+            nao: { saude: -15, estresse: 10 },
+            tags: ["tarde", "alimentacao"],
+            incompativel_com: [],
+            itens_compativeis: ["lanche_emergencia", "energetico"]
         }
     ],
 
@@ -71,8 +142,19 @@ const cartasGrupos = {
             tags: ["noite", "transporte"],
             incompativel_com: [],
             itens_compativeis: []
+        },
+        {
+            id: 401,
+            texto: "Você perdeu o último ônibus. Pegar um táxi caro ou caminhar 40 minutos até em casa?\n\n➡️ Táxi: Saldo -50, Estresse -5\n⬅️ Caminhar: Estresse +15, Saúde +5",
+            local: "Trabalho",
+            sim: { saldo: -50, estresse: -5 },
+            nao: { estresse: 15, saude: 5 },
+            tags: ["noite", "transporte"],
+            incompativel_com: [],
+            itens_compativeis: ["carteira", "tenis_confortavel"]
         }
     ],
+
     jantar: [
         {
             id: 14,
@@ -83,8 +165,29 @@ const cartasGrupos = {
             tags: ["noite", "alimentacao"],
             incompativel_com: [],
             itens_compativeis: ["comida_congelada", "vitamina"]
+        },
+        {
+            id: 402,
+            texto: "Sua mãe ligou perguntando se quer jantar na casa dela. Aceitar o convite carinhoso ou ficar em casa relaxando?\n\n➡️ Ir na casa da mãe: Felicidade +20, Estresse -10\n⬅️ Ficar em casa: Estresse -5, Felicidade +5",
+            local: "Casa",
+            sim: { felicidade: 20, estresse: -10 },
+            nao: { estresse: -5, felicidade: 5 },
+            tags: ["noite", "alimentacao", "social"],
+            incompativel_com: [],
+            itens_compativeis: ["presente_mae"]
+        },
+        {
+            id: 403,
+            texto: "Você tentou cozinhar, mas queimou a comida. Tentar novamente ou desistir e comer cereal?\n\n➡️ Tentar novamente: Estresse +10, Saúde +10\n⬅️ Cereal: Felicidade -10, Saúde -5",
+            local: "Casa",
+            sim: { estresse: 10, saude: 10 },
+            nao: { felicidade: -10, saude: -5 },
+            tags: ["noite", "alimentacao"],
+            incompativel_com: [],
+            itens_compativeis: ["livro_culinaria"]
         }
     ],
+
     dormir: [
         {
             id: 20,
@@ -95,14 +198,35 @@ const cartasGrupos = {
             tags: ["noite", "sono"],
             incompativel_com: [],
             itens_compativeis: ["cha_calmante", "remedio_sono"]
+        },
+        {
+            id: 404,
+            texto: "Você está exausto, mas lembrou que não escovou os dentes. Levantar para escovar ou dormir mesmo assim?\n\n➡️ Escovar: Saúde +5, Estresse +5\n⬅️ Dormir assim: Saúde -5, Estresse -5",
+            local: "Casa",
+            sim: { saude: 5, estresse: 5 },
+            nao: { saude: -5, estresse: -5 },
+            tags: ["noite", "sono", "higiene"],
+            incompativel_com: [],
+            itens_compativeis: ["escova_eletrica"]
+        },
+        {
+            id: 405,
+            texto: "Seus vizinhos estão fazendo barulho e você não consegue dormir. Ir lá reclamar educadamente ou usar tampões de ouvido?\n\n➡️ Reclamar: Estresse +10, Felicidade +5\n⬅️ Tampões: Estresse -5",
+            local: "Casa",
+            sim: { estresse: 10, felicidade: 5 },
+            nao: { estresse: -5 },
+            tags: ["noite", "sono", "social"],
+            incompativel_com: [],
+            itens_compativeis: ["tampao_ouvido", "mascara_dormir"]
         }
     ],
 
-    // ==================================================
-    // POOLS DE CARTAS ALEATÓRIAS (PARA SORTEIO)
-    // ==================================================
+    // =============================================================
+    // POOL DE CARTAS ALEATÓRIAS (Embaralhadas e sorteadas)
+    // =============================================================
 
     trabalho: [
+        // --- SUAS CARTAS ORIGINAIS ---
         {
             id: 5,
             texto: "Seu chefe pede para você buscar um café para ele. É uma tarefa simples, mas fora da sua função. Você aceita?\n\n➡️ Sim: Felicidade +5 (chefe feliz)\n⬅️ Não: Estresse +5",
@@ -182,9 +306,61 @@ const cartasGrupos = {
             tags: ["trabalho", "social"],
             incompativel_com: [],
             itens_compativeis: []
+        },
+        // --- CARTAS NOVAS QUE CRIEI ---
+        {
+            id: 501,
+            texto: "A impressora travou bem na hora que você precisa imprimir um documento urgente. Tentar consertar sozinho ou chamar o técnico?\n\n➡️ Tentar consertar: Estresse +15, Felicidade +5\n⬅️ Chamar técnico: Estresse -5, Saldo -30",
+            local: "Trabalho",
+            sim: { estresse: 15, felicidade: 5 },
+            nao: { estresse: -5, saldo: -30 },
+            tags: ["trabalho", "tecnologia"],
+            incompativel_com: [],
+            itens_compativeis: ["manual_impressora"]
+        },
+        {
+            id: 502,
+            texto: "Você descobriu que um colega está falando mal de você pelas costas. Confrontar a pessoa ou ignorar completamente?\n\n➡️ Confrontar: Estresse +20, Felicidade +10\n⬅️ Ignorar: Estresse +5, Felicidade -5",
+            local: "Trabalho",
+            sim: { estresse: 20, felicidade: 10 },
+            nao: { estresse: 5, felicidade: -5 },
+            tags: ["trabalho", "social", "conflito"],
+            incompativel_com: [],
+            itens_compativeis: ["guia_comunicacao"]
+        },
+        {
+            id: 503,
+            texto: "Chegou um e-mail com uma tarefa que não é sua responsabilidade, mas ninguém mais vai fazer. Assumir a tarefa ou repassar?\n\n➡️ Assumir: Estresse +15, Felicidade +5\n⬅️ Repassar: Felicidade -5",
+            local: "Trabalho",
+            sim: { estresse: 15, felicidade: 5 },
+            nao: { felicidade: -5 },
+            tags: ["trabalho", "responsabilidade"],
+            incompativel_com: ["muito_estressado"],
+            itens_compativeis: []
+        },
+        {
+            id: 504,
+            texto: "O ar condicionado quebrou e está um calor insuportável no escritório. Sugerir que todos saiam mais cedo ou aguentar firme?\n\n➡️ Sugerir sair: Felicidade +15, Estresse -10\n⬅️ Aguentar: Estresse +20, Saúde -5",
+            local: "Trabalho",
+            sim: { felicidade: 15, estresse: -10 },
+            nao: { estresse: 20, saude: -5 },
+            tags: ["trabalho", "ambiente"],
+            incompativel_com: [],
+            itens_compativeis: ["ventilador_portatil", "agua_gelada"]
+        },
+        {
+            id: 505,
+            texto: "Seu chefe cancelou uma reunião importante de última hora. Aproveitar o tempo livre ou adiantar outras tarefas?\n\n➡️ Tempo livre: Felicidade +10, Estresse -15\n⬅️ Adiantar tarefas: Estresse -5, Felicidade +5",
+            local: "Trabalho",
+            sim: { felicidade: 10, estresse: -15 },
+            nao: { estresse: -5, felicidade: 5 },
+            tags: ["trabalho", "produtividade"],
+            incompativel_com: [],
+            itens_compativeis: ["agenda_pessoal"]
         }
     ],
 
+    // --- OUTROS GRUPOS (mantidos como estavam) ---
     saude: [
         {
             id: 2,
@@ -197,22 +373,21 @@ const cartasGrupos = {
             acoes_sim: { adicionar_item: 1 },
             itens_compativeis: ["remedio", "vitamina_c"]
         }
-    ],
-
+    ]
 };
 
 const CARTA_CHEGOU_TRABALHO = {
-    id: 9001, // ID alto para não conflitar
+    id: 9001, 
     type: 'transicao',
     texto: 'Você chegou ao trabalho.',
-    tags: ['manha'] // Ajuda a função diaNoite()
+    tags: ['manha'] 
 };
 
 const CARTA_CHEGOU_CASA = {
     id: 9002,
     type: 'transicao',
     texto: 'Você chegou em casa.',
-    tags: ['noite'] // Ajuda a função diaNoite()
+    tags: ['noite'] 
 };
 
 const cartas = Object.values(cartasGrupos).flat();
@@ -223,12 +398,12 @@ let jogador = {
     felicidade: 50,
     saldo: 100,
     inventario: [],
-    // Novos campos para rastreamento
+
     estado: {
-        condicoes: [],          // gripado, cansado, etc.
+        condicoes: [],        
         ultimasCartas: [],      
         contadores: {
-            itens: 0,           // Cartas desde o último item
+            itens: 0,           
         },
         sequenciaDia: []
     }
@@ -237,77 +412,62 @@ let jogador = {
 let id_jogo = null;
 let cardCount = 0;
 let emTransicaoPeriodo = false;
-let currentCard = null; // Guarda referência à carta atual
+let currentCard = null; 
 
 function montarSequenciaDoDia() {
     const sequencia = [];
     
-    // Embaralha as cartas de trabalho para garantir variedade
     const trabalhoPool = [...cartasGrupos.trabalho].sort(() => Math.random() - 0.5);
 
-    // --- MANHÃ (7 cartas) ---
     sequencia.push(cartasGrupos.acordar_higiene[0]);
     sequencia.push(cartasGrupos.cafe_da_manha[0]);
     sequencia.push(cartasGrupos.transporte_trabalho[0]);
     sequencia.push(CARTA_CHEGOU_TRABALHO)
-    sequencia.push(...trabalhoPool.splice(0, 4)); // Pega as primeiras 4 cartas de trabalho
+    sequencia.push(...trabalhoPool.splice(0, 4));
 
-    // --- TARDE (5 cartas) ---
     sequencia.push(cartasGrupos.almoco[0]);
-    sequencia.push(...trabalhoPool.splice(0, 4)); // Pega as próximas 4 cartas de trabalho
+    sequencia.push(...trabalhoPool.splice(0, 4)); 
 
-    // --- NOITE (3 cartas) ---
     sequencia.push(cartasGrupos.volta_casa[0]);
     sequencia.push(CARTA_CHEGOU_CASA);
     sequencia.push(cartasGrupos.jantar[0]);
     sequencia.push(cartasGrupos.dormir[0]);
 
-    // Guarda a sequência final no estado do jogador
-    jogador.estado.sequenciaDia = sequencia.filter(Boolean); // .filter(Boolean) remove cartas não encontradas
+    jogador.estado.sequenciaDia = sequencia.filter(Boolean);
     console.log("ROTEIRO DO DIA MONTADO:", jogador.estado.sequenciaDia.map(c => c.id));
 }
 
-// IMPORTANTE: Remova a definição da classe Card e use essas funções auxiliares
-// Função para verificar itens compatíveis com a carta atual
 function verificarItensCompativeis(carta) {
     if (!carta.itens_compativeis || !jogador.inventario.length) {
         return [];
     }
-    
-    // Filtrar itens do inventário que são compatíveis com esta carta
+
     return jogador.inventario.filter(item => {
-        // Verificar se o item tem tags que correspondem aos tipos compatíveis
         if (item.tags) {
             const tagsArray = typeof item.tags === 'string' ? item.tags.split(',') : item.tags;
             return carta.itens_compativeis.some(tipo => 
                 tagsArray.includes(tipo)
             );
         }
-        // Se não tiver tags, usar nome do item como fallback
         return carta.itens_compativeis.some(tipo => 
             item.nome.toLowerCase().includes(tipo.toLowerCase())
         );
     });
 }
 
-// Função para mostrar menu de itens
 function mostrarMenuItens(itensCompativeis, cardElement) {
-    // Remover menu existente se houver
     const menuExistente = document.querySelector('.menu-itens');
     if (menuExistente) menuExistente.remove();
     
-    // Criar menu
     const menu = document.createElement('div');
     menu.classList.add('menu-itens');
     menu.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0, 0, 0, 0.9); border-radius: 10px; padding: 20px; min-width: 280px; z-index: 1000;';
     
-    // Título
     const titulo = document.createElement('h3');
     titulo.textContent = 'Escolha um item para usar:';
     titulo.style.cssText = 'color: white; margin-bottom: 15px; text-align: center;';
     menu.appendChild(titulo);
     
-    // Lista de itens
     itensCompativeis.forEach(item => {
         const itemBtn = document.createElement('div');
         itemBtn.classList.add('item-opcao');
@@ -322,22 +482,19 @@ function mostrarMenuItens(itensCompativeis, cardElement) {
         itemBtn.appendChild(itemNome);
         itemBtn.appendChild(itemUsos);
         
-        // Efeito hover
         itemBtn.addEventListener('mouseover', () => {
             itemBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
         });
         itemBtn.addEventListener('mouseout', () => {
             itemBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
         });
-        
-        // Clicar para usar
+
         itemBtn.addEventListener('click', () => {
             usarItemContextual(item);
             menu.remove();
 
             cardCount++;
-            
-            // Remover a carta atual
+
             cardElement.classList.add('dismissing');
             setTimeout(() => {
                 cardElement.remove();
@@ -348,7 +505,6 @@ function mostrarMenuItens(itensCompativeis, cardElement) {
         menu.appendChild(itemBtn);
     });
     
-    // Botão de cancelar
     const cancelarBtn = document.createElement('button');
     cancelarBtn.textContent = 'Cancelar';
     cancelarBtn.style.cssText = 'width: 100%; background-color: #444; color: white; border: none; padding: 10px; border-radius: 5px; margin-top: 10px; cursor: pointer;';
@@ -360,7 +516,6 @@ function mostrarMenuItens(itensCompativeis, cardElement) {
     document.body.appendChild(menu);
 }
 
-// Função para adicionar botão de uso de item em uma carta
 function adicionarBotaoUsarItem(cardElement, carta) {
     const itensCompativeis = verificarItensCompativeis(carta);
     
@@ -378,16 +533,13 @@ function adicionarBotaoUsarItem(cardElement, carta) {
     }
 }
 
-// Função para verificar incompatibilidades com inventário
 function cartaEhCompativel(carta) {
-    // Verificar se a carta está nas últimas mostradas (evitar repetição)
+
     if (jogador.estado.ultimasCartas.includes(carta.id)) {
         return false;
     }
 
-    // Verificar incompatibilidades com itens no inventário
     if (carta.incompativel_com && carta.incompativel_com.length > 0) {
-        // Verificar se tem algum item que torna esta carta incompatível
         const temItemIncompativel = jogador.inventario.some(item => 
             carta.incompativel_com.some(tag => 
                 item.tags && item.tags.includes(tag)
@@ -396,7 +548,6 @@ function cartaEhCompativel(carta) {
         if (temItemIncompativel) return false;
     }
     
-    // Verificar incompatibilidades com estado do jogador
     if (carta.incompativel_com.includes("muito_estressado") && jogador.estresse > 70) {
         return false;
     }
@@ -408,7 +559,6 @@ function cartaEhCompativel(carta) {
     return true;
 }
 
-// Função para usar item em contexto específico
 async function usarItemContextual(item) {
     try {
         const response = await fetch(`/api/game/jogos/${id_jogo}/inventario/usar`, {
@@ -420,17 +570,14 @@ async function usarItemContextual(item) {
         const data = await response.json();
         
         if (data.status === 'success') {
-            // Aplicar os efeitos do item
+
             aplicarEfeitos(data.efeitos);
-            
-            // Recarregar o inventário
+
             await carregarInventario();
             
-            // Mostrar mensagem mais discreta (tooltip em vez de alert)
+
             mostrarNotificacao(`Você usou ${item.nome}!`);
-            
-            // A linha que incrementava o contador de período foi removida daqui,
-            // pois essa lógica não existe mais no sistema de "Roteiro do Dia".
+
         } else {
             console.error('Erro ao usar item:', data.message);
         }
@@ -439,7 +586,6 @@ async function usarItemContextual(item) {
     }
 }
 
-// Função para mostrar notificação
 function mostrarNotificacao(mensagem) {
     const notificacao = document.createElement('div');
     notificacao.textContent = mensagem;
@@ -464,22 +610,19 @@ function mostrarNotificacao(mensagem) {
     }, 2000);
 }
 
-// Função melhorada para selecionar próxima carta com base no estado atual
 function selecionarProximaCarta() {
-    // Apenas pega a próxima carta da sequência pré-montada. Simples e infalível.
+
     const proximaCarta = jogador.estado.sequenciaDia[cardCount];
-    
-    // Fallback de emergência para não quebrar o jogo
+
     if (!proximaCarta) {
         console.error("Fim da sequência ou carta inválida! Encerrando o jogo.");
-        cardCount = jogador.estado.sequenciaDia.length; // Força o fim do jogo
+        cardCount = jogador.estado.sequenciaDia.length; 
         return null;
     }
     
     return proximaCarta;
 }
 
-// Carregar inventário ao iniciar o jogo
 async function carregarInventario() {
     try {
         if (!id_jogo) return;
@@ -546,27 +689,23 @@ async function carregarJogo() {
         if (data.status === 'success') {
             id_jogo = data.jogo.id_jogo;
             
-            // Carrega os status do jogador
             jogador.saude = data.jogo.saude;
             jogador.estresse = data.jogo.estresse;
             jogador.felicidade = data.jogo.felicidade;
             jogador.saldo = data.jogo.saldo;
             
-            // Inicializa o estado do jogador com a ESTRUTURA NOVA E CORRETA
             jogador.estado = {
                 condicoes: [],
                 ultimasCartas: [],
                 contadores: { itens: 3 },
-                sequenciaDia: [] // Apenas o que é necessário
+                sequenciaDia: [] 
             };
 
             await carregarInventario();
             
             cardCount = data.jogo.card_position || 0;
 
-            montarSequenciaDoDia(); // Monta o roteiro do dia
-            
-            // A primeira carta ainda não existe, então não chame diaNoite() aqui
+            montarSequenciaDoDia(); 
             atualizarHUD();
             
             console.log('Jogo carregado com sucesso:', data.jogo);
@@ -578,60 +717,145 @@ async function carregarJogo() {
     }
 }
 
-// Melhorar a interface de inventário
+// SUBSTITUA sua função atualizarInventarioUI por esta versão melhorada:
 function atualizarInventarioUI() {
     const inventarioElement = document.getElementById('inventario');
     inventarioElement.innerHTML = '';
     
-    // Criar botão de toggle para o inventário
     const inventarioToggle = document.createElement('button');
     inventarioToggle.id = 'toggle-inventario';
     inventarioToggle.innerHTML = '🎒';
-    inventarioToggle.style.cssText = 'background: none; border: none; font-size: 24px; cursor: pointer;';
+    inventarioToggle.style.cssText = 'background: none; border: none; font-size: 24px; cursor: pointer; position: relative;';
+    
+    // Badge com número de itens
+    if (jogador.inventario.length > 0) {
+        const badge = document.createElement('span');
+        badge.style.cssText = 'position: absolute; top: -5px; right: -5px; background-color: #ff4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;';
+        badge.textContent = jogador.inventario.length;
+        inventarioToggle.appendChild(badge);
+    }
+    
     inventarioElement.appendChild(inventarioToggle);
     
-    // Criar o painel de inventário (inicialmente oculto)
     const inventarioPanel = document.createElement('div');
     inventarioPanel.id = 'inventario-panel';
-    inventarioPanel.style.cssText = 'display: none; position: absolute; bottom: 60px; right: 10px; background-color: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; min-width: 200px; z-index: 100;';
+    inventarioPanel.style.cssText = `
+        display: none; 
+        position: absolute; 
+        bottom: 60px; 
+        right: 10px; 
+        background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(20,20,20,0.95));
+        backdrop-filter: blur(10px);
+        padding: 15px; 
+        border-radius: 15px; 
+        min-width: 280px; 
+        max-width: 320px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        z-index: 100;
+    `;
+    
+    // Título do inventário
+    const titulo = document.createElement('h3');
+    titulo.style.cssText = 'color: white; margin: 0 0 15px 0; font-size: 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;';
+    titulo.textContent = '🎒 Inventário';
+    inventarioPanel.appendChild(titulo);
     
     if (jogador.inventario.length === 0) {
-        inventarioPanel.innerHTML = '<p style="color: white; text-align: center;">Inventário vazio</p>';
+        const mensagemVazio = document.createElement('div');
+        mensagemVazio.style.cssText = 'text-align: center; color: rgba(255,255,255,0.6); font-style: italic; padding: 20px;';
+        mensagemVazio.innerHTML = '📦<br>Inventário vazio';
+        inventarioPanel.appendChild(mensagemVazio);
     } else {
-        const lista = document.createElement('ul');
-        lista.style.cssText = 'list-style: none; padding: 0; margin: 0;';
+        const lista = document.createElement('div');
+        lista.style.cssText = 'max-height: 300px; overflow-y: auto;';
         
         jogador.inventario.forEach(item => {
-            const li = document.createElement('li');
-            li.style.cssText = 'padding: 8px; margin-bottom: 5px; background-color: rgba(255,255,255,0.1); border-radius: 5px; color: white; display: flex; justify-content: space-between;';
-            li.innerHTML = `
-                <span>${item.nome}</span>
-                <span>${item.usos_restantes} usos</span>
+            const itemDiv = document.createElement('div');
+            itemDiv.style.cssText = `
+                display: flex; 
+                align-items: center; 
+                padding: 10px; 
+                margin-bottom: 8px; 
+                background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+                border-radius: 10px; 
+                color: white; 
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 1px solid rgba(255,255,255,0.1);
             `;
-            li.dataset.itemId = item.id_item_inventario;
             
-            // Informação sobre o item ao passar o mouse
+            // Ícone do item (baseado no tipo ou nome)
+            const icone = obterIconeItem(item);
+            const iconeSpan = document.createElement('span');
+            iconeSpan.style.cssText = 'font-size: 20px; margin-right: 12px; min-width: 24px;';
+            iconeSpan.textContent = icone;
+            
+            // Info do item
+            const infoDiv = document.createElement('div');
+            infoDiv.style.cssText = 'flex: 1; display: flex; flex-direction: column;';
+            
+            const nomeSpan = document.createElement('span');
+            nomeSpan.style.cssText = 'font-size: 14px; font-weight: 500; margin-bottom: 2px;';
+            nomeSpan.textContent = item.nome;
+            
+            const usosSpan = document.createElement('span');
+            usosSpan.style.cssText = 'font-size: 11px; color: rgba(255,255,255,0.7);';
+            usosSpan.textContent = `${item.usos_restantes} uso${item.usos_restantes !== 1 ? 's' : ''} restante${item.usos_restantes !== 1 ? 's' : ''}`;
+            
+            infoDiv.appendChild(nomeSpan);
+            infoDiv.appendChild(usosSpan);
+            
+            itemDiv.appendChild(iconeSpan);
+            itemDiv.appendChild(infoDiv);
+            
+            // Tooltip detalhado
             const tooltip = document.createElement('div');
-            tooltip.style.cssText = 'display: none; position: absolute; background-color: rgba(0,0,0,0.9); padding: 10px; border-radius: 5px; color: white; max-width: 200px; z-index: 101; right: 220px; bottom: 60px;';
+            tooltip.style.cssText = `
+                display: none; 
+                position: absolute; 
+                background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(20,20,20,0.95));
+                backdrop-filter: blur(10px);
+                padding: 12px; 
+                border-radius: 10px; 
+                color: white; 
+                max-width: 250px; 
+                z-index: 101; 
+                right: 340px; 
+                bottom: 60px;
+                border: 1px solid rgba(255,255,255,0.2);
+                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            `;
+            
             tooltip.innerHTML = `
-                <h4 style="margin: 0 0 5px 0;">${item.nome}</h4>
-                <p style="margin: 0 0 5px 0; font-size: 12px; font-style: italic;">${item.descricao || 'Sem descrição'}</p>
-                <div style="font-size: 11px;">
-                    <p style="margin: 2px 0;">Usar este item na situação apropriada</p>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 18px; margin-right: 8px;">${icone}</span>
+                    <h4 style="margin: 0; font-size: 14px;">${item.nome}</h4>
+                </div>
+                <p style="margin: 0 0 8px 0; font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.4;">${item.descricao || 'Sem descrição disponível'}</p>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.9);">
+                    ${criarEfeitosTexto(item)}
+                </div>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 10px; color: rgba(255,255,255,0.6);">
+                    💡 Use este item em situações compatíveis
                 </div>
             `;
             
-            li.addEventListener('mouseover', () => {
-                li.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            // Eventos de hover
+            itemDiv.addEventListener('mouseover', () => {
+                itemDiv.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))';
+                itemDiv.style.transform = 'translateY(-2px)';
                 tooltip.style.display = 'block';
             });
-            li.addEventListener('mouseout', () => {
-                li.style.backgroundColor = 'rgba(255,255,255,0.1)';
+            
+            itemDiv.addEventListener('mouseout', () => {
+                itemDiv.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))';
+                itemDiv.style.transform = 'translateY(0)';
                 tooltip.style.display = 'none';
             });
             
             inventarioElement.appendChild(tooltip);
-            lista.appendChild(li);
+            lista.appendChild(itemDiv);
         });
         
         inventarioPanel.appendChild(lista);
@@ -639,15 +863,102 @@ function atualizarInventarioUI() {
     
     inventarioElement.appendChild(inventarioPanel);
     
-    // Adicionar evento para mostrar/ocultar o painel
+    // Toggle do inventário
     inventarioToggle.addEventListener('click', () => {
         const panel = document.getElementById('inventario-panel');
         if (panel.style.display === 'none') {
             panel.style.display = 'block';
+            panel.style.animation = 'slideInUp 0.3s ease';
         } else {
-            panel.style.display = 'none';
+            panel.style.animation = 'slideOutDown 0.3s ease';
+            setTimeout(() => {
+                panel.style.display = 'none';
+            }, 250);
         }
     });
+    
+    // Fechar inventário ao clicar fora
+    document.addEventListener('click', (e) => {
+        const panel = document.getElementById('inventario-panel');
+        const toggle = document.getElementById('toggle-inventario');
+        
+        if (panel && panel.style.display === 'block' && 
+            !panel.contains(e.target) && !toggle.contains(e.target)) {
+            panel.style.animation = 'slideOutDown 0.3s ease';
+            setTimeout(() => {
+                panel.style.display = 'none';
+            }, 250);
+        }
+    });
+}
+
+// Função auxiliar para obter ícones dos itens
+function obterIconeItem(item) {
+    const nome = item.nome.toLowerCase();
+    const tipo = item.tipo ? item.tipo.toLowerCase() : '';
+    
+    // Ícones baseados no nome do item
+    if (nome.includes('remedio') || nome.includes('medicamento')) return '💊';
+    if (nome.includes('vitamina')) return '🟡';
+    if (nome.includes('cafe') || nome.includes('café')) return '☕';
+    if (nome.includes('energético') || nome.includes('energetico')) return '⚡';
+    if (nome.includes('fone') || nome.includes('headphone')) return '🎧';
+    if (nome.includes('tampão') || nome.includes('tampao')) return '🔇';
+    if (nome.includes('mascara') || nome.includes('máscara')) return '😴';
+    if (nome.includes('livro')) return '📚';
+    if (nome.includes('manual')) return '📖';
+    if (nome.includes('guia')) return '📋';
+    if (nome.includes('carteira')) return '👛';
+    if (nome.includes('dinheiro')) return '💰';
+    if (nome.includes('cartão') || nome.includes('cartao')) return '💳';
+    if (nome.includes('comida') || nome.includes('lanche')) return '🍎';
+    if (nome.includes('agua') || nome.includes('água')) return '💧';
+    if (nome.includes('ventilador')) return '🌪️';
+    if (nome.includes('guarda-chuva') || nome.includes('guarda_chuva')) return '☂️';
+    if (nome.includes('sapato') || nome.includes('tenis') || nome.includes('tênis')) return '👟';
+    if (nome.includes('tapete') || nome.includes('yoga')) return '🧘';
+    if (nome.includes('escova')) return '🦷';
+    if (nome.includes('presente')) return '🎁';
+    if (nome.includes('agenda')) return '📅';
+    if (nome.includes('cha') || nome.includes('chá')) return '🍵';
+    
+    // Ícones baseados no tipo
+    if (tipo.includes('medicamento') || tipo.includes('remedio')) return '💊';
+    if (tipo.includes('bebida')) return '🥤';
+    if (tipo.includes('comida') || tipo.includes('alimento')) return '🍎';
+    if (tipo.includes('equipamento') || tipo.includes('ferramenta')) return '🔧';
+    if (tipo.includes('roupa') || tipo.includes('acessorio')) return '👕';
+    if (tipo.includes('livro') || tipo.includes('leitura')) return '📚';
+    
+    // Ícone padrão
+    return '📦';
+}
+
+// Função auxiliar para criar texto dos efeitos
+function criarEfeitosTexto(item) {
+    const efeitos = [];
+    
+    if (item.efeito_saude && item.efeito_saude !== 0) {
+        const sinal = item.efeito_saude > 0 ? '+' : '';
+        efeitos.push(`❤️ Saúde: ${sinal}${item.efeito_saude}`);
+    }
+    
+    if (item.efeito_estresse && item.efeito_estresse !== 0) {
+        const sinal = item.efeito_estresse > 0 ? '+' : '';
+        efeitos.push(`😰 Estresse: ${sinal}${item.efeito_estresse}`);
+    }
+    
+    if (item.efeito_felicidade && item.efeito_felicidade !== 0) {
+        const sinal = item.efeito_felicidade > 0 ? '+' : '';
+        efeitos.push(`😊 Felicidade: ${sinal}${item.efeito_felicidade}`);
+    }
+    
+    if (item.efeito_saldo && item.efeito_saldo !== 0) {
+        const sinal = item.efeito_saldo > 0 ? '+' : '';
+        efeitos.push(`💰 Saldo: ${sinal}${item.efeito_saldo}`);
+    }
+    
+    return efeitos.length > 0 ? efeitos.join('<br>') : 'Sem efeitos especiais';
 }
 
 async function usarItem(item) {
@@ -661,13 +972,10 @@ async function usarItem(item) {
         const data = await response.json();
         
         if (data.status === 'success') {
-            // Aplicar os efeitos do item
             aplicarEfeitos(data.efeitos);
             
-            // Recarregar o inventário
             await carregarInventario();
             
-            // Mostrar mensagem com notificação em vez de alert
             mostrarNotificacao(`Você usou ${item.nome}!`);
         } else {
             console.error('Erro ao usar item:', data.message);
@@ -730,9 +1038,9 @@ async function aplicarEfeitos(efeitos) {
     console.log("Estado atual:", jogador);
 }
 
-// ...existing code...
+
 function appendNewCard() {
-    // 1. VERIFICA SE O JOGO ACABOU POR STATUS
+
     if (jogador.estresse >= 100 || jogador.felicidade <= 0 || jogador.saldo <= 0 || jogador.saude <= 0) {
         const mensagens = {
             estresse: "Fim do jogo! Você teve um ataque cardíaco.",
@@ -762,7 +1070,6 @@ function appendNewCard() {
         return;
     }
 
-    // 2. VERIFICA SE O JOGO ACABOU POR COMPLETAR O ROTEIRO
     if (cardCount >= jogador.estado.sequenciaDia.length) {
         console.log("Fim do roteiro alcançado. Mostrando tela final.");
         const fimDeJogo = document.createElement('div');
@@ -777,14 +1084,13 @@ function appendNewCard() {
         return;
     }
 
-    // 3. VERIFICA SE DEVE MOSTRAR UM ITEM ALEATÓRIO
+
     if (Math.random() < 0.1 && jogador.estado.contadores.itens >= 3) {
         jogador.estado.contadores.itens = 0;
         verificarItemAleatorio();
         return;
     }
 
-    // 4. SE O JOGO CONTINUA, PEGA A PRÓXIMA CARTA
     const cardAtual = selecionarProximaCarta();
     if (!cardAtual) {
         console.error("Não foi possível encontrar a próxima carta no roteiro. Avançando...");
@@ -794,9 +1100,7 @@ function appendNewCard() {
     }
     currentCard = cardAtual;
 
-    // 5. DECIDE QUAL TIPO DE CARTA MOSTRAR
     if (cardAtual.type === 'transicao') {
-        // É uma carta de transição
         const transicaoCard = document.createElement('div');
         transicaoCard.classList.add('card');
         transicaoCard.innerHTML = `
@@ -816,7 +1120,6 @@ function appendNewCard() {
         });
 
     } else {
-        // É uma carta normal de swipe
         const card = new Card({
             imageUrl: cardAtual.texto,
             onDismiss: appendNewCard,
@@ -843,27 +1146,22 @@ function appendNewCard() {
         swiper.append(card.element);
     }
 
-    // 6. ATUALIZA O EFEITO DE EMPILHAMENTO
     const cards = swiper.querySelectorAll('.card:not(.dismissing)');
     cards.forEach((card, index) => {
         card.style.setProperty('--i', index);
     });
 }
 
-// Função atualizada para verificar item aleatório
 async function verificarItemAleatorio() {
     try {
-        // Obter item aleatório do banco
         const response = await fetch('/api/game/itens/aleatorio');
         const data = await response.json();
         
         if (data.status === 'success') {
             const item = data.item;
-            
-            // Adicionar estilo ao botão
+
             const buttonStyle = "background-color: #2c88d9; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 16px; margin-top: 20px; cursor: pointer;";
-            
-            // Mostrar carta de item com descrição mais detalhada
+
             const itemCard = document.createElement('div');
             itemCard.classList.add('card');
             itemCard.innerHTML = `
@@ -885,25 +1183,18 @@ async function verificarItemAleatorio() {
                 <button class="pegar-item" style="${buttonStyle}">Pegar Item</button>
             `;
             
-            // Adicionar a carta ao swiper
             swiper.append(itemCard);
             
-            // Adicionar evento de clique ao botão
             const btn = itemCard.querySelector('.pegar-item');
-            // CORREÇÃO: Passar itemCard como segundo parâmetro
             btn.addEventListener('click', () => adicionarItemAoInventario(item.id_item, itemCard));
         }
     } catch (error) {
         console.error('Erro ao obter item aleatório:', error);
-        // Em caso de erro, continuar com o jogo normalmente
         appendNewCard();
     }
 }
 
-// Corrigir função de adicionar item ao inventário para evitar múltiplos cliques
-// Função corrigida para receber a referência da carta
 async function adicionarItemAoInventario(id_item, cartaOriginal = null) {
-    // Desabilitar o botão para evitar múltiplos cliques
     const btn = document.querySelector('.pegar-item');
     if (btn) {
         btn.disabled = true;
@@ -921,26 +1212,23 @@ async function adicionarItemAoInventario(id_item, cartaOriginal = null) {
         const data = await response.json();
         
         if (data.status === 'success') {
-            // Armazenar o item recebido para referência futura
             jogador.estado.ultimoItem = id_item;
             
             await carregarInventario();
             
-            // IMPORTANTE: Verificar se temos uma referência específica à carta
             if (cartaOriginal) {
                 cartaOriginal.classList.add('dismissing');
                 setTimeout(() => {
                     cartaOriginal.remove();
-                    appendNewCard(); // Avançar para próxima carta
+                    appendNewCard();
                 }, 300);
             } else {
-                // Caso de carta de item (que tem o botão "Pegar Item")
                 const itemCard = document.querySelector('.card');
                 if (itemCard) {
                     itemCard.classList.add('dismissing');
                     setTimeout(() => {
                         itemCard.remove();
-                        appendNewCard(); // Avançar para próxima carta
+                        appendNewCard();
                     }, 300);
                 } else {
                     appendNewCard();
@@ -948,7 +1236,6 @@ async function adicionarItemAoInventario(id_item, cartaOriginal = null) {
             }
         } else {
             console.error('Erro ao adicionar item:', data.message);
-            // Reativar o botão em caso de erro
             if (btn) {
                 btn.disabled = false;
                 btn.textContent = "Pegar Item";
@@ -957,7 +1244,6 @@ async function adicionarItemAoInventario(id_item, cartaOriginal = null) {
         }
     } catch (error) {
         console.error('Erro ao adicionar item:', error);
-        // Reativar o botão em caso de erro
         if (btn) {
             btn.disabled = false;
             btn.textContent = "Pegar Item";
@@ -979,7 +1265,6 @@ function diaNoite() {
     const noite = document.getElementById('noite');
     if (!dia || !noite || !currentCard) return;
 
-    // Decide o período pela TAG da carta atual
     const isNight = currentCard.tags.includes('noite');
 
     if (!isNight) {
@@ -993,7 +1278,6 @@ function diaNoite() {
     }
 }
 
-// Adicionar estilo CSS para o botão de inventário e animações
 const style = document.createElement('style');
 style.textContent = `
     body {
@@ -1083,11 +1367,37 @@ style.textContent = `
         background-color: #235f9e;
     }
 `;
+const novasAnimacoes = `
+    @keyframes slideInUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px);
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+    
+    @keyframes slideOutDown {
+        from { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        to { 
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+    }
+    `;
+    
+style.textContent += novasAnimacoes;
+
 document.head.appendChild(style);
 
 document.addEventListener('DOMContentLoaded', () => {
     carregarJogo().then(() => {
-        swiper.innerHTML = ''; // Limpa o baralho para um novo jogo
-        appendNewCard();     // Inicia o jogo com a sua nova lógica de ordem
+        swiper.innerHTML = '';
+        appendNewCard();
     });
 });
