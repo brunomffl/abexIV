@@ -129,16 +129,30 @@ exports.encerrarJogo = (req, res) => {
     );
 };
 
+// ENCONTRE esta função no controllers/game.js e SUBSTITUA por:
 exports.obterHistorico = (req, res) => {
     const id_usuario = req.user.id_usuario;
-
+    
     db.query(
-        "SELECT *, DATE_FORMAT(data_inicio, '%d/%m/%Y %H:%i') as data_inicio_formatada, DATE_FORMAT(data_fim, '%d/%m/%Y %H:%i') as data_fim_formatada FROM jogos WHERE id_usuario = ? ORDER BY data_inicio DESC",
+        `SELECT 
+            *,
+            DATE_FORMAT(data_inicio, '%d/%m/%Y %H:%i') as data_inicio_formatada,
+            CASE 
+                WHEN data_fim IS NULL THEN NULL
+                ELSE DATE_FORMAT(data_fim, '%d/%m/%Y %H:%i')
+            END as data_fim_formatada,
+            CASE 
+                WHEN data_fim IS NULL THEN 'Ativo'
+                ELSE 'Finalizado'
+            END as status
+        FROM jogos 
+        WHERE id_usuario = ? 
+        ORDER BY data_inicio DESC`,
         [id_usuario],
         (err, result) => {
             if (err) {
-                console.error("Erro ao buscar histórico de jogos:", err);
-                return res.status(500).json({ status: "error", message: "Erro ao buscar histórico" });
+                console.error('Erro ao obter histórico:', err);
+                return res.status(500).json({ status: "error", message: "Erro ao obter histórico" });
             }
             res.json({ status: "success", jogos: result });
         }
